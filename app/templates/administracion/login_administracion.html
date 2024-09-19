@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="shortcut icon" href="{{ url_for('static', filename='../static/images/Logo-uexternado.png') }}">
+  <link rel="stylesheet" href="{{url_for('static',filename='../static/dist/css/output.css')}}">
+  <script src="https://kit.fontawesome.com/175f4319ea.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="{{url_for('static', filename='../static/dist/js/numpad.js')}}"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body class="fondo bg-cover bg-no-repeat">
+  <style>
+    .fondo {
+      background-image: url("{{ url_for('static', filename='images/externado1.jpg') }}");
+    }
+  </style>
+  <header class="flex row bg-white max-h-32 justify-between items-center">
+    <img src="{{url_for('static',filename='../static/images/logo-uec.png')}}" alt=""
+      class="object-contain w-1/6 aspect-3/2 mx-4">
+    <div>
+      <ul class="navlist">
+        <li>
+          <a href="{{ url_for('index') }}"
+            class="text-green-900 m-16 text-2xl font-semibold p-4 rounded-xl hover:text-green-800 hover:shadow-2xl"><i
+              class="fa-solid fa-hand-point-left"></i> Volver</a>
+        </li>
+      </ul>
+    </div>
+  </header>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  {% for category, message in messages %}
+  <div class="mt-10 mx-5
+                                {% if category == 'success' %}
+                                bg-green-100 border border-green-400 text-green-700
+                                {% elif category == 'error' %}
+                                bg-red-100 border border-red-400 text-red-700
+                                {% elif category == 'warning' %}
+                                bg-yellow-100 border border-yellow-400 text-yellow-700
+                                {% endif %}
+                                px-4 py-3 rounded relative" role="alert">
+    <strong class="font-bold">
+      {% if category == 'success' %}
+      Éxito:
+      {% elif category == 'error' %}
+      Error:
+      {% elif category == 'warning' %}
+      Advertencia:
+      {% endif %}
+    </strong>
+    <span class="block sm:inline">{{ message }}</span>
+  </div>
+  {% endfor %}
+  {% endif %}
+  {% endwith %}
+
+
+  <div class="flex justify-center m-24">
+    <form action="{{ url_for('usuario.login_administracion') }}" class="bg-white max-w-lg  p-10 rounded-3xl shadow-2xl"
+      method="post">
+      <h2 class="text-4xl mb-4 text-center">Ingreso ADMINISTRADOR</h2>
+      <p class="font-light text-lg text-center">Por favor ingresa los siguientes datos:</p>
+      <div class="mt-8 grid gap-8">
+        <div class="form__group">
+          <input type="text" name="usuario" id="usuario" class="form__input" placeholder=" " required>
+          <label style="font-size: 1.2rem;" for="usuario" class="form__label">Usuario</label>
+          <span class="form__line"></span>
+        </div>
+        <div class="form__group">
+          <input type="password" name="contraseña" id="contraseña" class="form__input" placeholder=" " required>
+          <label style="font-size: 1.2rem;" for="contraseña" class="form__label">Contraseña</label>
+          <span class="form__line"></span>
+        </div>
+        <input type="submit" class="form__submit" name="entrar" value="Entrar">
+        <a href="{{ url_for('index') }}" class="form__submit__return">Volver</a>
+      </div>
+
+    </form>
+  </div>
+</body>
+
+</html>

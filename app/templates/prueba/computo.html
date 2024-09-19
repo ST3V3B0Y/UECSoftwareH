@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='../static/images/Logo-uexternado.png') }}">
+    <link rel="stylesheet" href="{{url_for('static',filename='../static/dist/css/output.css')}}">
+    <script src="https://kit.fontawesome.com/175f4319ea.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <title>Document</title>
+</head>
+
+<body style="height: 900px;">
+
+    <header>
+        <div class="flex flex-row items-center justify-between w-full h-12 sm:h-12 md:h-20 lg:h-28 xl:h-36 2xl:h-16 bg-lime-600 md:pt-1 pt-0.5">
+            <div style="background-color: #083424;" class="flex h-full items-center w-full shadow-slate-600 shadow-lg">
+                <div class="bg-green-900 flex h-full w-12 justify-center items-center">
+                    <a href="#" "><i class="fa-solid fa-bars fa-xl" style="color: #d7a904;"></i></a>
+                </div>
+                <div  class="flex flex-row items-center w-full justify-between">
+                    <a href="https://www.uexternado.edu.co/" class="md:flex md:items-center md:mx-4 lg:mx-4 w-1/4 sm:w-1/6 md:w-1/6 lg:w-1/6 xl:w-1/12 sm:h-min aspect-auto">
+                        <img src="{{url_for('static',filename='../static/images/logo-uec-blanco.png')}}" alt="">
+                    </a>
+                </div>
+                <a class="bg-lime-600 text-slate-100 flex flex-row justify-center cursor-pointer items-center p-1 md:p-3 mx-3 font-sans font-semibold  h-7 text-xs w-28 sm:w-14 sm:h-10 md:w-36 md:text-lg lg:text-sm lg:w-28 lg:h-8">Añadir
+                    App</a>
+                <div>
+                </div>
+            </div>
+            
+        </div>
+        
+    </header>
+    <article class="article w-full h-full bg-amber-50  flex flex-col items-center">
+        <section class="grid w-full sm:w-full md:w-1/2 lg:w-1/4 grid-rows-1 gap-4 my-8">
+            <div class="acordeon m-auto">
+                <div class="bg-white h2 shadow-lg p-2 flex flex-row">
+                    <img src="{{url_for('static',filename='../static/images/letra-d.png')}}" alt="Not Found"
+                            class="w-1/6 m-2 object-contain aspect-square h-1/6 self-center">
+                    <h2 class="border-l-2 flex items-center text-lg font-bold pl-4">
+                        Bloque D507
+                    </h2>
+                </div>
+                <div class="bloque bg-gray-50 m-auto shadow-inner ">
+                    <div class="contenido">
+                        <p class=" text-black text-center flex flex-col p-2">
+                            La sala de computo D507 cuenta con 68 equipos que cuentan con diferentes software especializado
+                            como Adobbe CC, Orange, Python, entre otros.
+                            <a href="{{ url_for('accion.D507') }}" class="bg-lime-500 text-sm text-slate-100 self-end p-1 my-5 font-sans font-semibold">¡Reserva Tu Equipo!</a>
+                        </p>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="acordeon m-auto">
+                <div class="bg-white h2  shadow-xl p-2 flex flex-row">
+                    <img src="{{url_for('static',filename='../static/images/letra-H.png')}}" alt="Not Found"
+                            class="w-1/6 m-2 object-contain aspect-square h-1/6 self-center">
+                    <h2 class="border-l-2 flex items-center text-lg font-bold pl-4">
+                        Bloque H405
+                    </h2>
+                </div>
+                <div class="bloque bg-slate-50 m-auto">
+                    <div class="contenido">
+                        <p class=" text-black text-center flex flex-col p-2">
+                            La sala de computo H405 cuenta con 34 equipos que cuentan con diferentes software especializado
+                            como Adobbe CC, Orange, Python, entre otros.
+                            <a href="{{ url_for('accion.H405') }}" class="bg-lime-500 text-sm text-slate-100 self-end p-1 my-5 font-sans font-semibold">¡Reserva Tu Equipo!</a>
+                        </p>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="acordeon m-auto">
+                <div class="bg-white h2 shadow-xl p-2 flex flex-row">
+                    <img src="{{url_for('static',filename='../static/images/letra-I.png')}}" alt="Not Found"
+                            class="w-1/6 m-2 object-contain aspect-square h-1/6 self-center">
+                    <h2 class=" border-l-2 flex items-center text-lg font-bold pl-4">
+                        Bloque I408
+                    </h2>
+                </div>
+                <div class="bloque bg-slate-50 m-auto shadow-inner ">
+                    <div class="contenido">
+                        <p class=" text-black text-center flex flex-col p-2">
+                            La sala de computo I408 cuenta con 24 equipos que cuentan con diferentes software especializado
+                            como Adobbe CC, Orange, Python, entre otros.
+                            <a href="{{ url_for('accion.I408') }}" class="bg-lime-500 text-sm text-slate-100 self-end p-1 my-5 font-sans font-semibold">¡Reserva Tu Equipo!</a>
+                        </p>
+                    </div>
+                    
+                </div>
+            </div>
+            
+
+        </section>
+        <a href="{{ url_for('accion.celular') }}" class=" bg-lime-600 text-lg text-slate-100 flex flex-row justify-center p-2 mx-3 font-sans font-semibold">Volver</a>
+    </article>
+
+    <script src="{{url_for('static',filename='../static/dist/js/acordeon.js')}}"></script>
+</body>
+
+</html>

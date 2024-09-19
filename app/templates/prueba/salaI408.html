@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='../static/images/Logo-uexternado.png') }}">
+    <link rel="stylesheet" href="{{url_for('static',filename='../static/dist/css/output.css')}}">
+    <script src="https://kit.fontawesome.com/175f4319ea.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <title>Document</title>
+</head>
+
+<body>
+
+    <header>
+        <div class="flex flex-row items-center justify-between w-full h-12 sm:h-12 md:h-20 lg:h-28 xl:h-36 2xl:h-16 bg-lime-600 md:pt-1 pt-0.5">
+            <div style="background-color: #083424;" class="flex h-full items-center w-full shadow-slate-600 shadow-lg">
+                <div class="bg-green-900 flex h-full w-12 justify-center items-center">
+                    <a href="#" "><i class="fa-solid fa-bars fa-xl" style="color: #d7a904;"></i></a>
+                </div>
+                <div  class="flex flex-row items-center w-full justify-between">
+                    <a href="https://www.uexternado.edu.co/" class="md:flex md:items-center md:mx-4 lg:mx-4 w-1/4 sm:w-1/6 md:w-1/6 lg:w-1/6 xl:w-1/12 sm:h-min aspect-auto">
+                        <img src="{{url_for('static',filename='../static/images/logo-uec-blanco.png')}}" alt="">
+                    </a>
+                </div>
+                <a class="bg-lime-600 text-slate-100 flex flex-row justify-center cursor-pointer items-center p-1 md:p-3 mx-3 font-sans font-semibold  h-7 text-xs w-28 sm:w-14 sm:h-10 md:w-36 md:text-lg lg:text-sm lg:w-28 lg:h-8">Añadir
+                    App</a>
+                <div>
+                </div>
+            </div>
+            
+        </div>
+        
+    </header>
+    <main class="w-full min-h-screen bg-slate-100">
+        <section class="bg-slate-600 md:shadow-md md:shadow-slate-300 ">
+            <div class="flex flex-row py-2 justify-start">
+                <a class="self-center  m-6" href="{{ url_for('accion.computo') }}"><i
+                        class="fa-solid fa-arrow-left fa-2xl" style="color: #d7a904;"></i></a>
+                <h1 class="border-l-8 px-2  border-green-700 text-white">
+                    Sala I408
+                </h1>
+            </div>
+        </section>
+        <div class="w-full md:flex md:flex-col md:mx-auto md:max-w-7xl">
+            <article class="bg-slate-100 md:shadow-md md:shadow-slate-300 md:py-5 md:max-h-screen">
+                <div class="flex flex-row px-5 pt-5">
+                    <p class="text-xl text-black font-bold ">
+                        Esta es la Sala I408, podrás escoger el equipo que esté disponible
+                    </p>
+                </div>
+                <div class="rounded-lg p-5 m-5 bg-slate-200">
+                    <div class="form__group">
+                        <input type="text" name="usuario" id="usuario" class="form__input " placeholder=" " required>
+                        <label style="font-size: 1.2rem;" for="usuario" class="form__label ">Busqueda</label>
+                        <span class="form__line"></span>
+                    </div>
+                    <div class="">
+                        <select id="estado" name="estado" class="form__input mt-5">
+                            <option value="">Todos</option>
+                            <option value="usado">Usado</option>
+                            <option value="libre">Libre</option>
+                        </select>
+                        <label style="font-size: 1.2rem;" for="estado" class="form__label ">Estado</label>
+                        <span class="form__line"></span>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <table class="my-5 bg-slate-100 rounded-2xl shadow-inner md:w-8/12">
+                            <thead>
+                                <tr>
+                                    <th class="p-5 text-center">Numero de Equipo</th>
+                                    <th class="p-5 text-center">Estado</th>
+                                    <th class="p-5 text-center">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-body">
+                                <form action="">
+                                    <!-- Los datos de la tabla se llenarán con JavaScript -->
+                                </form>
+                            </tbody>
+                        </table>
+                        <div id="pagination-controls" class="flex flex-row">
+                            <!-- Los controles de paginación se llenarán con JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+        
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let currentPage = 1;
+            const perPage = 10;
+    
+            function loadPage(page, search = '', estado = '') {
+                const endpoint = window.location.pathname.includes('H405') ? '/H405_data' : '/I408_data';
+                fetch(`${endpoint}?page=${page}&search=${encodeURIComponent(search)}&estado=${encodeURIComponent(estado)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const tableBody = document.getElementById('table-body');
+                        tableBody.innerHTML = '';
+    
+                        data.items.forEach(item => {
+                            const row = document.createElement('tr');
+                            const displayId = item.idEquipo.toString().slice(1); // Eliminar el primer dígito
+                            row.innerHTML = `
+                                <td class="p-2 text-center">${displayId}</td>
+                                <td class="p-2 text-center">${item.estadoEquipo}</td>
+                                <td class="p-2 text-center">
+                                    ${item.estadoEquipo === 'usado' 
+                                        ? '<button name="Liberar" value="' + item.idEquipo + '" class="bg-red-400 text-sm text-slate-100 flex flex-row justify-center p-1 mx-3 font-sans font-semibold">Liberar</button>' 
+                                        : '<button name="Apartar" value="' + item.idEquipo + '" class="bg-lime-400 text-sm text-slate-100 flex flex-row justify-center p-1 mx-3 font-sans font-semibold">Apartar</button>'
+                                    }
+                                </td>
+                            `;
+                            tableBody.appendChild(row);
+                        });
+    
+                        const paginationControls = document.getElementById('pagination-controls');
+                        paginationControls.innerHTML = '';
+    
+                        if (data.has_prev) {
+                            const prevButton = document.createElement('button');
+                            prevButton.textContent = 'Anterior';
+                            prevButton.className = 'pagination-button';
+                            prevButton.onclick = () => loadPage(data.prev_num, document.getElementById('usuario').value, document.getElementById('estado').value);
+                            paginationControls.appendChild(prevButton);
+                        }
+                        if (data.has_next) {
+                            const nextButton = document.createElement('button');
+                            nextButton.textContent = 'Siguiente';
+                            nextButton.className = 'pagination-button';
+                            nextButton.onclick = () => loadPage(data.next_num, document.getElementById('usuario').value, document.getElementById('estado').value);
+                            paginationControls.appendChild(nextButton);
+                        }
+                    });
+            }
+    
+            document.getElementById('usuario').addEventListener('input', function() {
+                loadPage(1, this.value, document.getElementById('estado').value);
+            });
+    
+            document.getElementById('estado').addEventListener('change', function() {
+                loadPage(1, document.getElementById('usuario').value, this.value);
+            });
+    
+            loadPage(currentPage);
+        });
+    </script>
+    
+</body>
+
+</html>

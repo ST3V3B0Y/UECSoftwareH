@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='../static/images/Logo-uexternado.png') }}">
+    <link rel="stylesheet" href="{{url_for('static',filename='../static/dist/css/output.css')}}">
+    <script src="https://kit.fontawesome.com/175f4319ea.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <title>Document</title>
+</head>
+
+<body>
+
+    <header>
+        <div  class="flex flex-row items-center justify-between w-full h-12 sm:h-12 md:h-20 lg:h-28 xl:h-36 2xl:h-16 bg-lime-600 md:pt-1 pt-0.5">
+            <div style="background-color: #083424;" class="flex h-full items-center w-full shadow-slate-600 shadow-lg">
+                <div class="bg-green-900 flex h-full w-12 justify-center items-center">
+                    <a href="#" "><i class="fa-solid fa-bars fa-xl" style="color: #d7a904;"></i></a>
+                </div>
+                <div  class="flex flex-row items-center w-full justify-between">
+                    <a href="https://www.uexternado.edu.co/" class="md:flex md:items-center md:mx-4 lg:mx-4 w-1/4 sm:w-1/6 md:w-1/6 lg:w-1/6 xl:w-1/12 sm:h-min aspect-auto">
+                        <img src="{{url_for('static',filename='../static/images/logo-uec-blanco.png')}}" alt="">
+                    </a>
+                </div>
+                <a class="bg-lime-600 text-slate-100 flex flex-row justify-center cursor-pointer items-center p-1 md:p-3 mx-3 font-sans font-semibold  h-7 text-xs w-28 sm:w-14 sm:h-10 md:w-36 md:text-lg lg:text-sm lg:w-28 lg:h-8">Añadir
+                    App</a>
+                <div>
+                </div>
+            </div>
+            
+        </div>
+        
+    </header>
+
+    <article class="w-full min-h-screen bg-amber-50 flex flex-col items-center">
+        <section class="grid w-full sm:w-full md:w-1/2 lg:w-1/4 grid-rows-1 gap-4 my-8">
+            <div class="bg-white mx-16 shadow-xl p-2">
+                <div>
+                    <a href="#" class="flex flex-row">
+                        <img src="{{url_for('static',filename='../static/images/carnet.png')}}" alt="Not Found"
+                            class="w-1/6 mx-2 object-contain aspect-square h-1/6 self-center">
+                        <div class="flex flex-col ml-2 p-2 border-l-2 justify-center cursor-pointer">
+                            <h2 class="text-lg font-bold px-2">
+                                Carné Digital
+                            </h2>
+                        </div>
+
+                    </a>
+                </div>
+                
+            </div>
+            <div class="bg-white mx-16 shadow-xl p-2">
+                <div>
+                    <a href="#" class="flex flex-row">
+                        <img src="{{url_for('static',filename='../static/images/periodico.png')}}" alt="Not Found"
+                            class="w-1/6 mx-2 object-contain aspect-square h-1/6 self-center">
+                        <div class="flex flex-col ml-2 p-2 border-l-2 justify-center cursor-pointer">
+                            <h2 class="text-lg font-bold px-2">
+                                Noticias
+                            </h2>
+                        </div>
+
+                    </a>
+                </div>
+                
+            </div>
+            <div class="bg-white mx-16 shadow-xl p-2">
+                <div>
+                    <a href="#" class="flex flex-row">
+                        <img src="{{url_for('static',filename='../static/images/Eventos.png')}}" alt="Not Found"
+                            class="w-1/6 mx-2 object-contain aspect-square h-1/6 self-center">
+                        <div class="flex flex-col ml-2 p-2 border-l-2 justify-center cursor-pointer">
+                            <h2 class="text-lg font-bold px-2">
+                                Eventos
+                            </h2>
+                        </div>
+
+                    </a>
+                </div>
+                
+            </div>
+            <div class="bg-white mx-16 shadow-xl p-2">
+                <div>
+                    <a href="#" class="flex flex-row">
+                        <img src="{{url_for('static',filename='../static/images/ubicacion.png')}}" alt="Not Found"
+                            class="w-1/6 mx-2 object-contain aspect-square h-1/6 self-center">
+                        <div class="flex flex-col ml-2 p-2 border-l-2 justify-center cursor-pointer">
+                            <h2 class="text-lg font-bold px-2">
+                                Mapa del Campus
+                            </h2>
+                        </div>
+
+                    </a>
+                </div>
+                
+            </div>
+            <div class="bg-white mx-16 shadow-xl p-2">
+                <div>
+                    <a href="{{ url_for('accion.computo') }}" class="flex flex-row">
+                        <img src="{{url_for('static',filename='../static/images/computo.png')}}" alt="Not Found"
+                            class="w-1/6 mx-2 object-contain aspect-square h-1/6 self-center">
+                        <div class="flex flex-col ml-2 p-2 border-l-2 justify-center cursor-pointer">
+                            <h2 class="text-lg font-bold px-2">
+                                Salas de Computo
+                            </h2>
+                        </div>
+
+                    </a>
+                </div>
+                
+            </div>
+            <div class="bg-white mx-16 shadow-xl p-2">
+                <div>
+                    <a href="#" class="flex flex-row">
+                        <img src="{{url_for('static',filename='../static/images/faq.png')}}" alt="Not Found"
+                            class="w-1/6 mx-2 object-contain aspect-square h-1/6 self-center">
+                        <div class="flex flex-col ml-2 p-2 border-l-2 justify-center cursor-pointer">
+                            <h2 class="text-lg font-bold px-2">
+                                FAQ Externadista
+                            </h2>
+                        </div>
+
+                    </a>
+                </div>
+                
+            </div>
+            <div class="bg-white mx-16 shadow-xl p-2">
+                <div>
+                    <a href="#" class="flex flex-row">
+                        <img src="{{url_for('static',filename='../static/images/whatsapp.png')}}" alt="Not Found"
+                            class="w-1/6 mx-2 object-contain aspect-square h-1/6 self-center">
+                        <div class="flex flex-col ml-2 px-2 border-l-2 justify-center cursor-pointer">
+                            <h2 class="text-lg font-bold px-2">
+                                MES
+                            </h2>
+                            <p class="font-light px-2 text-slate-400">
+                                Mesa Estratégica de Servicios
+                            </p>
+                        </div>
+
+                    </a>
+                </div>
+                
+            </div>
+            
+
+        </section>
+    </article>
+    <footer>
+        
+    </footer>
+
+</body>
+
+</html>

@@ -1,0 +1,545 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+    list-style: none;
+    text-decoration: none;
+}
+
+body{
+    overflow: scroll;
+    min-height: 100vh;
+    background: linear-gradient(245.59deg, #4d9559 0%, #38703d 28.53%, #133917 75.52%);
+}
+
+.filtro{
+    display: none;
+}
+
+.navlist a{
+    border-bottom: 2px solid transparent;
+    transition: all .55s ease;
+}
+
+.hero{
+    height: 100%;
+    width: 100%;
+    padding: 100px;
+    min-height: 100vh;
+    background: linear-gradient(245.59deg, #4d9559 0%, #38703d 28.53%, #133917 75.52%);
+    position: fixed;
+    overflow: auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: center;
+    gap: 2rem;
+}
+
+.hero-text h1{
+    font-family: sans-serif, cursive;
+    font-size: 90px;
+    line-height: 1;
+    color: white;
+    margin: 0 0 45px;
+}
+
+.hero-text h4{
+    font-size: 30px;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 10px;
+}
+
+.hero-text p{
+    color: white;
+    font-size: 15px;
+    line-height: 1.9;
+    margin-bottom: 10px;
+}
+
+.hero-text a{
+    display: inline-block;
+    color: white;
+    background: #4d9559;
+    border: 1px solid transparent;
+    padding: 12px 30px;
+    line-height: 1.4;
+    font-size: 20px;
+    font-weight: 500;
+    border-radius: 30px;
+    text-transform: uppercase;
+    transition: all .55s ease;
+}
+
+.hero-text a:hover{
+    background: transparent;
+    border: 1px solid white;
+    transform: translateX(8px);
+}
+
+.hero-text a.ctaa{
+    background: transparent;
+    border: 1px solid white;
+    margin-left: 12px;
+}
+
+.hero-text a.ctaa i{
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+.hero-img{
+    margin-top: -10%;
+    padding-left: 20%;
+    background-size: cover;
+}
+
+.col_text{
+    position: absolute;
+    margin-top: -34%;
+    margin-left: 25.5%;
+}
+
+h1{
+    color: #fff;
+    font-size: 50px;
+}
+
+p{
+    color: #fff;
+    font-size: 16px;
+    line-height: 18px;
+}
+
+
+.card{
+    width: 23vw;
+    height: 25vh;
+    display: inline-block;
+    border-radius: 10px;
+    box-sizing: border-box;
+    cursor: pointer;
+    margin: 20px;
+    background-position: center;
+    background-size: cover;
+    transition: transform 0.5s;
+}
+
+.btn-card{
+    margin-top: 35px;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.card:hover{
+    transform: translateY(-10px);
+    box-shadow: 25px 25px 25px -10px #133917;
+    transition: ease-out 0.5s;
+}
+
+.cards_two{
+    margin-left: 16%;
+}
+
+.cardsix{
+    position: absolute;
+    margin-top: -16.1%;
+    margin-left: 26%;
+}
+
+h5{
+    color: #fff;
+    text-shadow: 0 0 5px #000000;
+    font-size: 30px;
+}
+
+.card p{
+    text-shadow: 0 0 15px #000;
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.form__group{
+    position: relative;
+    --color: #5757577e;
+}
+
+.format{
+    width: 100%;
+    margin: 0;
+    padding: 10px;
+    border-radius: 15px;
+    background-color: #fff;
+    font-size: 1.2rem;
+    font-family: 'Roboto', sans-serif;
+}
+
+.option{
+    color: black;
+    font-family: 'Roboto', sans-serif;
+}
+
+
+.form__input{
+    width: 100%;
+    background: none;
+    color: #706c6c;
+    font-size: 1rem;
+    padding: .6em .3em;
+    border: none;
+    outline: none;
+    border-bottom: 1px solid var(--color);
+    font-family: 'Roboto', sans-serif;
+}
+
+.form__input:not(:placeholder-shown){
+    color: #4d4646;
+}
+
+.form__input:focus + .form__label,
+.form__input:not(:placeholder-shown) + .form__label{
+    transform: translateY(-12px) scale(.7);
+    transform-origin: left top;
+    color: rgba(0,46,25,.8); 
+}
+
+.form__label{
+    color: var(--color);
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    left: 5px;
+    transform: translateY(10px);
+    transition: transform .5s, color .3s;
+}
+
+.form__submit{
+    text-decoration: none;
+    background-color: rgba(0,46,25,.8);
+    color: #fff;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-size: 1.4rem;
+    padding: .8em 0;
+    border: none;
+    border-radius: .5em;
+    transition: all .55s ease;
+    text-align: center;
+    font-weight: bold;
+}
+
+
+.form__submit__return{
+    margin-top: -20px;
+    text-decoration: none;
+    background-color: rgba(0,46,25,.8);
+    color: #fff;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-size: 1.4rem;
+    padding: .8em 0;
+    border: none;
+    border-radius: .5em;
+    transition: all .55s ease;
+    font-weight: bold;
+    text-align: center;
+}
+
+.login{
+    text-align: center;
+    font-weight: 500;
+    font-size: 1.3rem;
+    color: black;
+}
+
+.form__submit_register{
+    margin-top: -15px;
+    text-decoration: none;
+    background-color: rgba(0,46,25,.8);
+    color: #fff;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-size: 1.4rem;
+    padding: .8em .3rem;
+    border: none;
+    border-radius: .5em;
+    transition: all .55s ease;
+    font-weight: bold;
+    text-align: center;
+}
+
+.form__submit:hover{
+    background-color: rgba(7, 85, 50, 0.8);
+    transform: translateY(-5px);
+}
+
+.form__submit__return:hover{
+    background-color: rgba(7, 85, 50, 0.8);
+    transform: translateY(-5px);
+}
+
+.form__submit_register:hover{
+    background-color: rgba(7, 85, 50, 0.8);
+    transform: translateY(-5px);
+}
+
+.form__line{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: #3866f2;     
+    transform: scale(0);
+    transform: left bottom;
+    transition: transform.4s;
+}
+
+.form__input:focus ∼ .form__line,
+.form__input:not(:placeholder-shown) ∼ .form__line{
+    transform: scale(1);
+}  
+
+
+
+/* DISEÑO NUMPAD */
+/* BACKGROUND NUMPAD */
+#numpad-back {
+    position: fixed;
+    top: 98px;
+    left: 0;
+    width: 100%;
+    height: 1000vh;
+    background: rgba(0, 0, 0, 0.7);
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.3s;
+  }
+  #numpad-back.show {
+    visibility: visible;
+    opacity: 1;
+  }
+  
+  /* DISEÑO NUMPAD */
+  #numpad-wrap, #numpad-display {
+    font-family: 'Poppins', sans-serif;
+  }
+  #numpad-wrap {
+    width: 46vh;
+    margin: 250px auto;
+    padding: 10px;
+    background: #f2f2f2;
+    border: 1px solid #ccc;
+  }
+  
+  /* MOSTRAR NÚMEROS */
+  #numpad-display {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 5px;
+    font-size: 2.5em;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  
+  /* BOTONES NÚMERICOS */
+  #numpad-btns {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .numpad-btn {
+    box-sizing: border-box;
+    width: 25%;
+    padding: 18px;
+    border: 1px solid #aaa;
+    background: #444;
+    color: #fff;
+    text-align: center;
+    font-size: 2em;
+  }
+  .numpad-btn.zero {
+    width: 50%;
+  }
+  .numpad-btn.zeroN {
+    width: 75%;
+  }
+  .numpad-btn.ninja {
+    display: none;
+  }
+  .numpad-btn.ng {
+    background: #333;
+  }
+  .numpad-btn.cx {
+    background: #B23025;
+    border: 1px solid #C73D32;
+  }
+  .numpad-btn.ok {
+    background: #1FA83A;
+    border: 1px solid #1FC72D;
+  }
+  .numpad-btn:hover {
+    cursor: pointer;
+  }
+/* FIN DISEÑO NUMPAD */
+
+
+/* Diseño Asientos */
+
+.cta{
+    align-items: center;
+    padding: 15px;
+    margin: 12px 10px;
+    background-color: rgba(0, 255, 136, 0.5);
+    border-radius: 5px;
+    transition: all .4s ease;
+    color: white;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.cta:hover{
+    background-color: rgba(218, 218, 218, 0.822);
+    cursor: pointer;
+    color: black;
+}
+
+.right{
+    position: absolute;
+    margin-top: 0;
+    margin-left: 250px;
+    border-radius: 10px;
+}
+
+
+.cta__right{
+    padding: 15px;
+    margin: 8px 3px;
+    background-color: rgba(0, 255, 136, 0.5);
+    border-radius: 5px;
+    transition: all .4s ease;
+    color: white;
+    font-weight: bold;
+    font-size: 15px;
+}
+.cta__right_usado{
+    padding: 15px;
+    margin: 8px 3px;
+    background-color: rgb(207, 0, 0);
+    border-radius: 5px;
+    transition: all .4s ease;
+    color: white;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.cta__right:hover{
+    background-color: rgba(218, 218, 218, 0.822);
+    color: black;
+    cursor: pointer;
+}
+.cta__right_usado:hover{
+    background-color: rgba(218, 218, 218, 0.822);
+    color: black;
+    cursor: pointer;
+}
+
+.info_recep{
+    color: #fff;
+    font-size: 1.2rem;
+}
+
+.recepcion{
+    width: 70px;
+    margin-left: 38px;
+    background-size: cover;
+}
+
+.line-3{
+    margin-right: 22rem;
+    gap: 8px;
+}
+
+.section li{
+    transition: all .4s ease;
+}
+
+/* INICIO DE ESTILOS DE ACORDEON*/
+
+.acordeon{
+    width: 90%;
+    max-width: 120em;
+}
+
+
+
+.acordeon .contenido{
+    overflow: hidden;
+    height: 0;
+    padding: 0em;
+    transition: all .5s ease;
+    
+}
+
+.acordeon .bloque.activo .contenido{
+    height: 11em;
+    padding: 1em;
+}
+
+/*FIN DE ESTILOS DE ESTILOS DE ACORDEON*/
+
+/* INICIO DE ESTILOS DE PAGINACION*/
+
+.pagination-button {
+    background-color: #a3e635; /* Color de fondo */
+    color: #ffffff; /* Color del texto */
+    border: none;
+    padding: 10px 20px;
+    margin: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+
+
+.pagination-links ul {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+}
+
+.pagination-links ul li {
+    margin-right: 5px; /* Espaciado entre elementos de paginación */
+}
+
+.pagination-links ul li a, .pagination-links ul li span {
+    display: block;
+    padding: 5px 10px;
+    text-decoration: none;
+    color: #f1f5f9;
+    background-color: #a3e635;
+    border-radius: 4px;
+}
+
+.pagination-links ul li a:hover {
+    background-color: #84cc16;
+}
+
+.pagination-links ul li.active span {
+    background-color: #a3e635;
+    color: #f1f5f9;
+    border-color: #a3e635;
+}
+
+/*FIN DE ESTILOS DE PAGINAICON*/

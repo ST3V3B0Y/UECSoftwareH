@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="shortcut icon" href="{{ url_for('static', filename='../static/images/Logo-uexternado.png') }}" />
+    <link rel="stylesheet" href="{{url_for('static',filename='../static/dist/css/output.css')}}" />
+    <script src="https://kit.fontawesome.com/175f4319ea.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+</head>
+
+<body>
+    <!--inicio nav-->
+    <header class="flex row bg-white max-h-32 justify-between items-center">
+        <img src="{{url_for('static',filename='../static/images/logo-uec.png')}}" alt=""
+            class="object-contain w-1/6 aspect-3/2 mx-4" />
+            <ul class="navlist">
+                <li>
+                    <a href="{{ url_for('usuario.administracion') }}"
+                        class="text-green-900 m-16 text-2xl font-semibold p-4 rounded-xl hover:text-green-800 hover:shadow-2xl"><i
+                            class="fa-solid fa-hand-point-left"></i> Volver</a>
+                </li>
+            </ul>
+    </header>
+    <!--fin nav-->
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="mt-10 mx-5
+                    {% if category == 'success' %}
+                        bg-green-100 border border-green-400 text-green-700
+                    {% elif category == 'error' %}
+                        bg-red-100 border border-red-400 text-red-700
+                    {% elif category == 'warning' %}
+                        bg-yellow-100 border border-yellow-400 text-yellow-700
+                    {% endif %}
+                px-4 py-3 rounded relative" role="alert">
+                    <strong class="font-bold">
+                        {% if category == 'success' %}
+                            Éxito:
+                        {% elif category == 'error' %}
+                            Error:
+                        {% elif category == 'warning' %}
+                            Advertencia:
+                        {% endif %}
+                    </strong>
+                    <span class="block sm:inline">{{ message }}</span>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+
+    <div id="contenedor" class="bg-slate-100 rounded-2xl max-w-7xl flex flex-col m-auto my-10">
+        <div class="bg-green-600 opacity-95 rounded-xl flex flex-row shadow-lg justify-evenly items-center py-4">
+            <p class="text-slate-100 text-3xl font-normal font-sans">
+                Equipos en Uso {{ cantidad_equipos }}.
+            </p>
+        </div>
+        <div class="bg-white shadow-md p-10 rounded-b-xl">
+            <p class="text-black ">
+                Busqueda de registros por equipo o cedula
+            </p>
+            <div class="form__group my-5 flex flex-row">
+                <input type="text" name="usuario" id="search-input" class="form__input" autofocus placeholder=" " required>
+                <label style="font-size: 1.2rem;" for="search-input" class="form__label">Busqueda</label>
+                <span class="form__line"></span>
+                <button class="text-white rounded-lg text-center px-5 mx-5" style="background-color: rgba(0, 46, 25, .8);">Buscar</button>
+                <button class="text-white rounded-lg text-center px-5 mx-5" style="background-color: rgba(0, 46, 25, .8);" id="liberar_todos">Liberar todos</button>
+            </div>
+            <!-- Tabla que se ajusta al contenido -->
+            <div id="tabla">
+                <form action="" method="post">
+                    <div class="not-prose relative rounded-xl bg-slate-100">
+                        <div style="background-position:10px 10px" class="absolute inset-0 bg-grid-slate-100 [mask-image:linear-gradient(0deg,#fff,rgba(255,255,255,0.6))] dark:bg-grid-slate-700/25 dark:[mask-image:linear-gradient(0deg,rgba(255,255,255,0.1),rgba(255,255,255,0.5))]"></div>
+                            <div class="relative rounded-xl">
+                                <div class="shadow-sm my-8">
+                                    <table id="data-table" class="border-collapse table-auto w-full text-sm">
+                                        <thead>
+                                            <tr>
+                                                <th class="border-b border-slate-300 p-4 pl-4 text-slate-500 text-left">Nombre</th>
+                                                <th class="border-b border-slate-300 p-4 pl-4 text-slate-500 text-left">Documento</th>
+                                                <th class="border-b border-slate-300 p-4 pl-4 text-slate-500 text-left">Sala</th>
+                                                <th class="border-b border-slate-300 p-4 pl-4 text-slate-500 text-left">Equipo</th>
+                                                <th class="border-b border-slate-300 p-4 pl-4 text-slate-500 text-left">Fecha Ingreso</th>
+                                                <th class="border-b border-slate-300 p-4 pl-4 text-slate-500 text-left">Accion</th>
+                                            </tr>
+                                        </thead>
+                                        <form id="form-liberar-equipo">
+                                            <tbody id="usuarios-tbody" class="bg-slate-100"></tbody>
+                                                {% for equipo in equipos_usados %}
+                                                    <tr class="elemento">
+                                                        <td class="border-b border-slate-300 p-4 pl-8 text-slate-500">{{ equipo[0] }}</td> <!-- NombreUsuario -->
+                                                        <td class="border-b border-slate-300 p-4 pl-8 text-slate-500">{{ equipo[1] }}</td> <!-- identificacionUsuario -->
+                                                        <td class="border-b border-slate-300 p-4 text-slate-500">{{ equipo[5] }}</td> <!-- Sala -->
+                                                        <td class="border-b border-slate-300 p-4 pr-8 text-slate-500" id="idEquipo">{{ equipo[2] }}</td> <!-- ID del Equipo -->
+                                                        <td class="border-b border-slate-300 p-4 pr-8 text-slate-500">{{ equipo[3] }}</td> <!-- Fecha de Ingreso -->
+                                                        <td class="border-b border-slate-300 p-4 pr-8 text-slate-500">
+                                                            <button class="text-white rounded-lg text-center liberar-btn" data-id="{{ equipo[6] }}" style="background-color: rgba(0, 46, 25, .8);">
+                                                                <p class="p-3">Liberar</p>
+                                                            </button>
+                                                        </td> <!-- Botones -->
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>  
+                                        </form>
+                                        
+                                    </table>
+                                </div>
+                            </div>
+                        <div class="absolute inset-0 pointer-events-none border border-black/5 rounded-xl dark:border-white/5"></div>
+                    </div>
+                </form>
+            </div>
+            <!-- Controles de paginación en su propia fila -->
+            <div id="pagination-controls" class="flex justify-center my-4"></div>
+        </div>
+    </div>
+    
+
+    <!-- Script de Busqueda -->
+    <script>
+
+    </script>
+    
+    <!-- Script de Paginación -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const rowsPerPage = 14;
+            const table = document.getElementById('usuarios-tbody');
+            const rows = table.getElementsByTagName('tr');
+            const totalPages = Math.ceil(rows.length / rowsPerPage);
+            
+            
+
+
+            function displayPage(page) {
+                const start = (page - 1) * rowsPerPage;
+                const end = start + rowsPerPage;
+    
+                for (let i = 0; i < rows.length; i++) {
+                    rows[i].style.display = i >= start && i < end ? '' : 'none';
+                }
+            }
+    
+            function createPaginationControls() {
+                const paginationControls = document.getElementById('pagination-controls');
+                paginationControls.innerHTML = '';
+    
+                for (let i = 1; i <= totalPages; i++) {
+                    const btn = document.createElement('button');
+                    btn.textContent = i;
+                    btn.classList.add('px-3', 'py-1', 'mx-1', 'bg-gray-200', 'hover:bg-gray-300', 'rounded');
+                    btn.addEventListener('click', function() {
+                        displayPage(i);
+                    });
+                    paginationControls.appendChild(btn);
+                }
+            }
+
+            displayPage(1);
+            createPaginationControls();
+            
+            // Inicializar la primera página
+        });
+    </script>
+    <!-- Script de SweetAlert2 y liberacion de equipos -->
+    <script>
+        document.querySelectorAll('.liberar-btn').forEach(button => {
+            button.addEventListener('click', function(event) {
+                event.preventDefault();  // Evita el comportamiento por defecto del botón
+                const idUsuario = this.getAttribute('data-id');  // Obtiene el ID del usuario
+                const idEquipo = this.closest('tr').querySelector('#idEquipo').innerHTML.trim();   // Obtiene el valor de idEquipo
+                // Llama a la función para actualizar el historial
+                actualizarHistorial(idUsuario, idEquipo);
+            });
+        });
+
+        liberar_todos = document.getElementById('liberar_todos')
+        liberar_todos.addEventListener('click', function(event){
+            event.preventDefault()
+            liberarTodos()
+
+        })
+
+        function liberarTodos(){
+            fetch('/equipo/liberar_todo/',{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    },
+            }).then(response => response.json()).then(data=>{
+                if (data.success){
+                    Swal.fire({
+                        title: 'Equipos liberados',
+                        text: 'Todos los equipos han sido liberados con éxito',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    }).then(()=>{
+                        window.location.reload();
+                    })
+                }
+                else {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'Ha ocurrido un error al liberar los equipos',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    }).then(()=>{
+                        window.location.reload();
+                    })
+                }
+            })
+        }
+    
+        function actualizarHistorial(idUsuario, idEquipo) {
+            fetch(`/equipo/liberar_equipo/${idEquipo}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ idEquipo : idEquipo , idUsuario : idUsuario })  // Envia el idEquipo en el cuerpo de la petición
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Éxito!',
+                        text: data.message,
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        // Redirige después de cerrar la alerta
+                        window.location.href = `{{ url_for('equipo.estado_equipo') }}`;
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: data.message,
+                        confirmButtonText: 'OK'
+                    }).then(()=>{
+                        window.location.href = `{{ url_for('equipo.estado_equipo') }}`
+                    });
+                }
+            })
+            .catch(error => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Ocurrió un error en la petición',
+                    confirmButtonText: 'OK'
+                });
+            });
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+</body>
+
+</html>
