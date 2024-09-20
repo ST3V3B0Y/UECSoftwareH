@@ -11,14 +11,19 @@ from PIL import Image, ImageTk  # Pillow para manejar imágenes
 from pynput import mouse, keyboard
 import threading
 
+Mouse_listener = mouse.Listener(...)
+Mouse_listener.start()
+keyboard_listener = keyboard.Listener(...)
+keyboard_listener.start()
+
 # Función para bloquear el mouse
 def bloquear_mouse():
-    with mouse.Listener(on_move=lambda x, y: False, on_click=lambda x, y, button, pressed: False):
+    with Mouse_listener(on_move=lambda x, y: False, on_click=lambda x, y, button, pressed: False):
         listener.join()
 
 # Función para bloquear el teclado
 def bloquear_teclado():
-    with keyboard.Listener(on_press=lambda key: False):
+    with keyboard_listener(on_press=lambda key: False):
         listener.join()
 
 # Función para mostrar el protector de pantalla con imagen
@@ -67,8 +72,9 @@ def get_processes():
     return processes
 
 def connect_to_server():
-    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    client = None
     try:
+        client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         client.connect((SERVER_HOST, SERVER_PORT))
         print("Client Side Application")
         while True:
@@ -95,8 +101,11 @@ def connect_to_server():
             except Exception as e:
                 print(f"Error: {e}")    
                 break
+    except socket.error as e:
+        print(f"Error al crear o conectar el socket: {e}")
     finally:
-        client.close()
+        if client is not None:  # Verifica si el socket fue creado
+            client.close()  # Cierra el socket solo si fue creado
 
 if __name__ == "__main__":
     connect_to_server()

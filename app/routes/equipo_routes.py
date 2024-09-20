@@ -60,9 +60,9 @@ def handle_client(conn, addr, accion):
     connected_clients.append({'ip': addr[0], 'conn': conn})
     print(f"Equipos conectados: {[client['ip'] for client in connected_clients]}")
 
-    while True:
-        print("entra a while")
-        try:
+    try:
+        while True:
+            print("entra a while")
             data = conn.recv(1024).decode()
             if not data:
                 print(f"Cliente {addr} desconectado")
@@ -72,28 +72,15 @@ def handle_client(conn, addr, accion):
 
             if command['action'] == 'processes':
                 print(f"Procesos recibidos desde {addr}: {command['data']}")
-            
+                
             print("antes de enviar accion")
             response = json.dumps({'action': accion })
             conn.send(response.encode())
 
-        except json.JSONDecodeError:
-            print("Error al decodificar JSON, los datos pueden estar mal formateados")
-            break
-        except ConnectionResetError:
-            print(f"El cliente {addr} ha cerrado la conexión")
-            break
-        except OSError as e:
-            print(f"Error en el socket: {e}")  # Captura errores de socket
-            break
-        except Exception as e:
-            print(f"Error manejando el cliente: {e}")
-            break
-        finally:
-            try:
-                conn.close()  # Asegúrate de cerrar la conexión aquí
-            except Exception as e:
-                print(f"Error cerrando la conexión: {e}")
+    except Exception as e:
+        print(f"Error manejando el cliente: {e}")
+    finally:
+        conn.close()  # Asegúrate de cerrar el socket aquí
 
 @bp.route("/equipo/pedir_equipo", methods=["GET", "POST"])
 @login_required
@@ -127,10 +114,12 @@ def pedir_equipo():
                 server.send(response.encode())  # Enviar la acción al cliente
                 server.close()
                 return jsonify({"status": "success", "message": f"Computador {pc} registrado y desbloqueado correctamente."})
+            except socket.timeout:
+                print(f"Timeout al intentar conectar con el equipo {pc} en {equipo_ip}")
+            except socket.error as se:
+                print(f"Error de socket: {se}")
             except Exception as e:
                 print(f"Error al conectar con el equipo {pc} en {equipo_ip}: {e}")
-                return jsonify({"status": "error", "message": f"No se pudo conectar con el equipo {pc}."})
-
         except IntegrityError as e:
             print("error en registro pc: ", e)
             db.session.rollback()
