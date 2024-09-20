@@ -107,41 +107,13 @@ def index():
     return render_template('index.html')
 
 
-server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-    
-
-        
-def start_server():
-    server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    try:
-        server.bind((SERVER_HOST, SERVER_PORT))
-        server.listen()
-        print(f"Servidor escuchando en {SERVER_HOST}:{SERVER_PORT}")
-    except Exception as e:
-            print(f"Error al iniciar el servidor: {e}")
-    finally:
-        server.close()
-
-
 
 with app.app_context():
     Base = declarative_base()
     target_metadata = db.metadata
     db.create_all()
 
-import signal
-
-def signal_handler(sig, frame):
-    print('Cerrando el servidor de sockets...')
-    server.close()  # Asegúrate de cerrar el socket
-
-# Registrar la señal
-signal.signal(signal.SIGINT, signal_handler)
-signal.signal(signal.SIGTERM, signal_handler)
 
 if __name__ == '__main__':
-    socket_thread = threading.Thread(target=start_server)
-    socket_thread.start()
     app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
 

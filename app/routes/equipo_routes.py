@@ -16,8 +16,29 @@ from app.models import Usuario
 import socket
 import json
 import threading
+from app.config import SERVER_HOST, SERVER_PORT
 
 bp = Blueprint("equipo", __name__)
+
+def start_server():
+    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    SERVER_HOST = SERVER_HOST  # Asegúrate de que esté escuchando en todas las interfaces de red
+    SERVER_PORT = SERVER_PORT
+    try:
+        server.bind((SERVER_HOST, SERVER_PORT))
+        server.listen()
+        print(f"Servidor escuchando en {SERVER_HOST}:{SERVER_PORT}")
+        while True:
+            conn, addr = server.accept()
+            print(f"Conexión establecida con {addr}")
+            client_thread = threading.Thread(target=handle_client, args=(conn, addr, 'unlock'))
+            client_thread.start()
+    except Exception as e:
+        print(f"Error al iniciar el servidor: {e}")
+    finally:
+        server.close()
+
 
 
 @bp.route("/equipo", methods=["GET", "POST"])
@@ -52,7 +73,7 @@ def handle_client(conn, addr,accion):
             if command['action'] == 'processes':
                 # Procesar los datos recibidos del cliente
                 print(f"Procesos recibidos desde {addr}: {command['data']}")
-            
+            print("antes de enviar accion")
             response = json.dumps({'action': accion })
             conn.send(response.encode())
 
@@ -77,32 +98,32 @@ def pedir_equipo():
             noRepeatUser = Historial.query.filter(Historial.Usuario_idUsuario==current_user.idUsuario, Historial.horaFin==None).first()
             if noRepeatUser:
                 return jsonify({"status": "warning", "message": "El usuario ya tiene asignado un equipo"})
+            
+            equipo = Equipo.query.filter_by(idEquipo=pc).first()
+            equipo.estadoEquipo = "usado"
                 
             registro = Historial(
                 Usuario_idUsuario=current_user.idUsuario,
                 Equipo_idEquipo=pc,
                 nombreSala="D507",
             )
-            equipo = Equipo.query.filter_by(idEquipo=pc).first()
-            equipo.estadoEquipo = "usado"
             db.session.add(registro)
             db.session.add(equipo)
             db.session.commit()
             
-            
+            equipo_ip = equipo.ipEquipo 
             server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            while True:
-                print("entra while de pedir equipo")
-                try:
-                    conn, addr = server.accept()
-                    accion='unlock'
-                    client_thread = threading.Thread(target=handle_client, args=(conn, addr, accion))
-                    client_thread.start()
-                    logout_user()
-                    return jsonify({"status": "success", "message": "Computador registrado correctamente..."})
-                except Exception as e:
-                    print(f"Error aceptando conexión: {e}")
             
+            try:
+                server.connect((equipo_ip, 5000))  # Conectar al cliente (IP del equipo)
+                accion = 'unlock'
+                response = json.dumps({'action': accion})
+                server.send(response.encode())  # Enviar la acción al cliente
+                server.close()
+                return jsonify({"status": "success", "message": f"Computador {pc} registrado y desbloqueado correctamente."})
+            except Exception as e:
+                print(f"Error al conectar con el equipo {pc} en {equipo_ip}: {e}")
+                return jsonify({"status": "error", "message": f"No se pudo conectar con el equipo {pc}."})
 
         except IntegrityError as e:
             print("error en registro pc: ", e)
