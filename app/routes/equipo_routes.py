@@ -13,7 +13,9 @@ from datetime import datetime
 from app.models import Equipo
 from app.models import Historial
 from app.models import Usuario
-
+import socket
+import json
+import threading
 
 bp = Blueprint("equipo", __name__)
 
@@ -29,6 +31,42 @@ def equipo():
         )
 
 
+
+def handle_client(conn, addr,accion):
+    global connected_clients
+    print(f"Conexión establecida desde {addr}")
+
+    # Agregar el cliente al array con su dirección IP
+    connected_clients.append({'ip': addr[0], 'conn': conn})
+    print(f"Equipos conectados: {[client['ip'] for client in connected_clients]}")
+    while True:
+        print("entra a while")
+        try:
+            data = conn.recv(1024).decode()
+            if not data:
+                print(f"Cliente {addr} desconectado")
+                break
+            
+            command = json.loads(data)
+
+            if command['action'] == 'processes':
+                # Procesar los datos recibidos del cliente
+                print(f"Procesos recibidos desde {addr}: {command['data']}")
+            
+            response = json.dumps({'action': accion })
+            conn.send(response.encode())
+
+        except json.JSONDecodeError:
+            print("Error al decodificar JSON, los datos pueden estar mal formateados")
+            break
+        except ConnectionResetError:
+            print(f"El cliente {addr} ha cerrado la conexión")
+            break
+        except Exception as e:
+            print(f"Error manejando el cliente: {e}")
+            break
+        finally :
+            conn.close()
 
 @bp.route("/equipo/pedir_equipo", methods=["GET", "POST"])
 @login_required
@@ -50,8 +88,21 @@ def pedir_equipo():
             db.session.add(registro)
             db.session.add(equipo)
             db.session.commit()
-            logout_user()
-            return jsonify({"status": "success", "message": "Computador registrado correctamente..."})
+            
+            
+            server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            while True:
+                print("entra while de pedir equipo")
+                try:
+                    conn, addr = server.accept()
+                    accion='unlock'
+                    client_thread = threading.Thread(target=handle_client, args=(conn, addr, accion))
+                    client_thread.start()
+                    logout_user()
+                    return jsonify({"status": "success", "message": "Computador registrado correctamente..."})
+                except Exception as e:
+                    print(f"Error aceptando conexión: {e}")
+            
 
         except IntegrityError as e:
             print("error en registro pc: ", e)

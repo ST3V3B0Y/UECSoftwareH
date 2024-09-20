@@ -1,2 +1,4 @@
 psutil
 pyinstaller
+Pillow
+pynput

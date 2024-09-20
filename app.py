@@ -12,7 +12,9 @@ from flask_login import (
 from sqlalchemy.exc import IntegrityError
 from app import create_app,db
 from app.models import Equipo
+from app.routes import equipo_routes
 from app.models import Usuario
+from app.config import SERVER_HOST, SERVER_PORT
 import os
 import socket
 import threading
@@ -104,63 +106,21 @@ def index():
 
     return render_template('index.html')
 
-HOST = '10.100.103.142'  # Dirección IP del servidor
-PORT = 5000
+
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     
-def handle_client(conn, addr):
-    print(f"Conexión desde {addr}")
-    while True:
-        print("entra a while")
-        try:
-            data = conn.recv(1024).decode()
-            print("datos", data)
-            if not data:
-                print("Cliente desconectado")
-                break
-
-            command = json.loads(data)
-            
-            if command['action'] == 'get_processes':
-                # Ejecutar comando en el cliente para obtener procesos
-                print("mundo")
-            elif command['action'] == 'lock_screen':
-                # Ejecutar comando para bloquear la pantalla
-                print("hola")
-        except json.JSONDecodeError:
-            print("Error al decodificar JSON, los datos pueden estar mal formateados")
-            break
-        except ConnectionResetError:
-            print(f"El cliente {addr} ha cerrado la conexión")
-            break
-        except Exception as e:
-            print(f"Error manejando el cliente: {e}")
-            break
-        finally :
-            print("sale del finally")
-        print("final while")    
-        conn.close()
 
         
 def start_server():
     server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     try:
-        server.bind((HOST, PORT))
+        server.bind((SERVER_HOST, SERVER_PORT))
         server.listen()
-        print(f"Servidor escuchando en {HOST}:{PORT}")
-        while True:
-            print("entra whiñe de start_Server")
-            try:
-                conn, addr = server.accept()
-                client_thread = threading.Thread(target=handle_client, args=(conn, addr))
-                client_thread.start()
-            except Exception as e:
-                print(f"Error aceptando conexión: {e}")
+        print(f"Servidor escuchando en {SERVER_HOST}:{SERVER_PORT}")
     except Exception as e:
             print(f"Error al iniciar el servidor: {e}")
     finally:
-        print("sale whiñe de start_Server")
         server.close()
 
 
