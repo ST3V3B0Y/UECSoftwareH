@@ -51,7 +51,7 @@ def equipo():
             "administracion/equipo/main.html", usuario=usuario, equipos=equipos
         )
 
-
+connected_clients =[]
 
 def handle_client(conn, addr,accion):
     global connected_clients
