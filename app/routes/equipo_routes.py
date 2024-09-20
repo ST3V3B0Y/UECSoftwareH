@@ -23,12 +23,12 @@ bp = Blueprint("equipo", __name__)
 def start_server():
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    SERVER_HOST = SERVER_HOST  # Asegúrate de que esté escuchando en todas las interfaces de red
-    SERVER_PORT = SERVER_PORT
+    HOST = SERVER_HOST  # Asegúrate de que esté escuchando en todas las interfaces de red
+    PORT = SERVER_PORT
     try:
-        server.bind((SERVER_HOST, SERVER_PORT))
+        server.bind((HOST, PORT))
         server.listen()
-        print(f"Servidor escuchando en {SERVER_HOST}:{SERVER_PORT}")
+        print(f"Servidor escuchando en {HOST}:{PORT}")
         while True:
             conn, addr = server.accept()
             print(f"Conexión establecida con {addr}")
