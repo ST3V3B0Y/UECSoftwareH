@@ -53,15 +53,15 @@ def equipo():
 
 connected_clients =[]
 
-def handle_client(conn, addr,accion):
+def handle_client(conn, addr, accion):
     global connected_clients
     print(f"Conexión establecida desde {addr}")
 
-    # Agregar el cliente al array con su dirección IP
     connected_clients.append({'ip': addr[0], 'conn': conn})
     print(f"Equipos conectados: {[client['ip'] for client in connected_clients]}")
+
     while True:
-        print("entra a while linea 64 de equipo_routes")
+        print("entra a while")
         try:
             data = conn.recv(1024).decode()
             if not data:
@@ -71,8 +71,8 @@ def handle_client(conn, addr,accion):
             command = json.loads(data)
 
             if command['action'] == 'processes':
-                # Procesar los datos recibidos del cliente
                 print(f"Procesos recibidos desde {addr}: {command['data']}")
+            
             print("antes de enviar accion")
             response = json.dumps({'action': accion })
             conn.send(response.encode())
@@ -83,11 +83,17 @@ def handle_client(conn, addr,accion):
         except ConnectionResetError:
             print(f"El cliente {addr} ha cerrado la conexión")
             break
+        except OSError as e:
+            print(f"Error en el socket: {e}")  # Captura errores de socket
+            break
         except Exception as e:
             print(f"Error manejando el cliente: {e}")
             break
-        finally :
-            conn.close()
+        finally:
+            try:
+                conn.close()  # Asegúrate de cerrar la conexión aquí
+            except Exception as e:
+                print(f"Error cerrando la conexión: {e}")
 
 @bp.route("/equipo/pedir_equipo", methods=["GET", "POST"])
 @login_required
