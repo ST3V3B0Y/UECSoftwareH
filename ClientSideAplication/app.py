@@ -11,19 +11,15 @@ from PIL import Image, ImageTk  # Pillow para manejar imágenes
 from pynput import mouse, keyboard
 import threading
 
-Mouse_listener = mouse.Listener(...)
-Mouse_listener.start()
-keyboard_listener = keyboard.Listener(...)
-keyboard_listener.start()
 
-# Función para bloquear el mouse
+
 def bloquear_mouse():
-    with Mouse_listener(on_move=lambda x, y: False, on_click=lambda x, y, button, pressed: False):
+    with mouse.Listener(on_move=lambda x, y: False, on_click=lambda x, y, button, pressed: False) as listener:
         listener.join()
 
 # Función para bloquear el teclado
 def bloquear_teclado():
-    with keyboard_listener(on_press=lambda key: False):
+    with keyboard.Listener(on_press=lambda key: False) as listener:
         listener.join()
 
 # Función para mostrar el protector de pantalla con imagen
@@ -32,7 +28,7 @@ def mostrar_protector():
     ventana.attributes('-fullscreen', True)  # Pantalla completa
 
     # Cargar la imagen de fondo
-    imagen = Image.open("src/images/.jpg")  # Cambia esto por la ruta de tu imagen
+    imagen = Image.open("src/images/tu_imagen.jpg")  # Cambia esto por la ruta de tu imagen
     imagen = imagen.resize((ventana.winfo_screenwidth(), ventana.winfo_screenheight()), Image.ANTIALIAS)  # Ajustar la imagen a la pantalla
     imagen_fondo = ImageTk.PhotoImage(imagen)
 
