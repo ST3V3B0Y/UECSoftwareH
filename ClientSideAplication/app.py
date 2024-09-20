@@ -44,13 +44,6 @@ def mostrar_protector():
 def desbloquear():
     global listener
     listener.stop()
-    hostname = socket.gethostname()
-    ipv4= socket.gethostbyname(hostname)
-    info = {
-        "informacion": "se desbloqueo el equipo",
-        "respuesta": ipv4
-    }
-    return  info
 
 # Ejecutar el bloqueo en paralelo
 def ejecutar_bloqueo():
@@ -63,16 +56,7 @@ def ejecutar_bloqueo():
 
     # Mostrar el protector de pantalla
     mostrar_protector()
-    # Obtener el nombre del host actual
-    hostname = socket.gethostname()
 
-# Obtener la dirección IPv4 del equipo actual
-    ipv4 = socket.gethostbyname(hostname)
-    info = {
-        "informacion": "se bloqueo el equipo",
-        "ipv4": ipv4
-    }
-    return info
 
 # Iniciar el bloqueo
 
@@ -94,9 +78,6 @@ def connect_to_server():
                     break
                 ejecutar_bloqueo()
                 
-                processes = get_processes()
-                response = json.dumps({'action': 'processes', 'data': processes})
-                client.send(response.encode())
                 
                 command = json.loads(data)
                 if command['action'] == 'unlock':
@@ -106,6 +87,9 @@ def connect_to_server():
                 elif command['action'] == 'lock':
                     ejecutar_bloqueo()
                     
+                processes = get_processes()
+                response = json.dumps({'action': 'processes', 'data': processes})
+                client.send(response.encode())
             except json.JSONDecodeError:
                 print("Error al decodificar JSON")
             except Exception as e:
