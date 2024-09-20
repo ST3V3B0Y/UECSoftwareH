@@ -61,7 +61,7 @@ def handle_client(conn, addr,accion):
     connected_clients.append({'ip': addr[0], 'conn': conn})
     print(f"Equipos conectados: {[client['ip'] for client in connected_clients]}")
     while True:
-        print("entra a while")
+        print("entra a while linea 64 de equipo_routes")
         try:
             data = conn.recv(1024).decode()
             if not data:
