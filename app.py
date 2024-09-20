@@ -22,7 +22,7 @@ import json
 import psutil
 import ctypes
 import signal
-
+from app.routes.equipo_routes import start_server
 app = create_app()  
 
 @app.route("/")
@@ -114,6 +114,16 @@ with app.app_context():
     db.create_all()
 
 
+# Función para iniciar el servidor de sockets en un hilo separado
+def run_socket_server():
+    start_server()
+
 if __name__ == '__main__':
+    # Inicia el servidor de sockets en un hilo
+    socket_thread = threading.Thread(target=run_socket_server)
+    socket_thread.start()  # Inicia el hilo del servidor de sockets
+
     app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
 
+    # Asegúrate de que el hilo del servidor de sockets se cierre cuando se cierre la aplicación
+    socket_thread.join()
