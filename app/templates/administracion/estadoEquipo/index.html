@@ -222,7 +222,7 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ idEquipo : idEquipo , idUsuario : idUsuario })  // Envia el idEquipo en el cuerpo de la petición
+                body: JSON.stringify({ idUsuario: idUsuario })  // Envío correcto del idUsuario
             })
             .then(response => response.json())
             .then(data => {

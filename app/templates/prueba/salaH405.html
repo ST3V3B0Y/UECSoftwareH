@@ -33,58 +33,60 @@
         </div>
         
     </header>
-    <main class="w-full bg-slate-100">
-        <section class="bg-slate-600">
-            <div class="flex flex-row py-2 justify-center">
-                <a class="self-center w-1/12 mr-6" href="{{ url_for('accion.computo') }}"><i
+    <main class="w-full min-h-screen bg-amber-50">
+        <section class="bg-slate-600 md:shadow-md md:shadow-slate-300 ">
+            <div class="flex flex-row py-2 justify-start">
+                <a class="self-center  m-6" href="{{ url_for('accion.computo') }}"><i
                         class="fa-solid fa-arrow-left fa-2xl" style="color: #d7a904;"></i></a>
                 <h1 class="border-l-8 px-2  border-green-700 text-white">
                     Sala H405
                 </h1>
             </div>
         </section>
-        <article class="bg-slate-100 min-h-screen">
-            <div class="flex flex-row p-5">
-                <p class="text-xl text-black font-bold ">
-                    Esta es la Sala H405, podrás escoger el equipo que esté disponible
-                </p>
-            </div>
-            <div class="rounded-lg p-5 m-5 bg-slate-200">
-                <div class="form__group">
-                    <input type="text" name="usuario" id="usuario" class="form__input " placeholder=" " required>
-                    <label style="font-size: 1.2rem;" for="usuario" class="form__label ">Busqueda</label>
-                    <span class="form__line"></span>
+        <div class="w-full md:flex md:flex-col md:mx-auto md:max-w-7xl">
+            <article class="bg-gray-50 mt-5 md:shadow-md md:shadow-slate-300 md:py-5 md:max-h-screen">
+                <div class="flex flex-row px-5 pt-5">
+                    <p class="text-xl text-black font-bold ">
+                        Esta es la Sala H405, podrás escoger el equipo que esté disponible
+                    </p>
                 </div>
-                <div class="">
-                    <select id="estado" name="estado" class="form__input mt-5">
-                        <option value="">Todos</option>
-                        <option value="usado">Usado</option>
-                        <option value="libre">Libre</option>
-                    </select>
-                    <label style="font-size: 1.2rem;" for="estado" class="form__label ">Estado</label>
-                    <span class="form__line"></span>
-                </div>
-                <div class="flex flex-col items-center">
-                    <table class="my-5 bg-slate-100 rounded-2xl shadow-inner">
-                        <thead>
-                            <tr>
-                                <th class="p-5 text-center">Numero de Equipo</th>
-                                <th class="p-5 text-center">Estado</th>
-                                <th class="p-5 text-center">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="table-body">
-                            <form action="">
-                                <!-- Los datos de la tabla se llenarán con JavaScript -->
-                            </form>
-                        </tbody>
-                    </table>
-                    <div id="pagination-controls" class="flex flex-row">
-                        <!-- Los controles de paginación se llenarán con JavaScript -->
+                <div class="rounded-lg p-5 m-5 bg-slate-200">
+                    <div class="form__group">
+                        <input type="text" name="usuario" id="usuario" class="form__input " placeholder=" " required>
+                        <label style="font-size: 1.2rem;" for="usuario" class="form__label ">Busqueda</label>
+                        <span class="form__line"></span>
+                    </div>
+                    <div class="">
+                        <select id="estado" name="estado" class="form__input mt-5">
+                            <option value="">Todos</option>
+                            <option value="usado">Usado</option>
+                            <option value="libre">Libre</option>
+                        </select>
+                        <label style="font-size: 1.2rem;" for="estado" class="form__label ">Estado</label>
+                        <span class="form__line"></span>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <table class="my-5 bg-slate-100 rounded-2xl shadow-inner md:w-8/12">
+                            <thead>
+                                <tr>
+                                    <th class="p-5 text-center">Numero de Equipo</th>
+                                    <th class="p-5 text-center">Estado</th>
+                                    <th class="p-5 text-center">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-body">
+                                <form action="">
+                                    <!-- Los datos de la tabla se llenarán con JavaScript -->
+                                </form>
+                            </tbody>
+                        </table>
+                        <div id="pagination-controls" class="flex flex-row">
+                            <!-- Los controles de paginación se llenarán con JavaScript -->
+                        </div>
                     </div>
                 </div>
-            </div>
-        </article>
+            </article>
+        </div>
     </main>
 
     <script>

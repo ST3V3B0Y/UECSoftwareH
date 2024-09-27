@@ -20,6 +20,17 @@ from app.config import SERVER_HOST, SERVER_PORT
 
 bp = Blueprint("equipo", __name__)
 
+@bp.route("/equipo", methods=["GET", "POST"])
+@login_required
+def equipo():
+    if request.method == "GET":
+        usuario = current_user
+        equipos = Equipo.query.all()
+        return render_template(
+            "administracion/equipo/main.html", usuario=usuario, equipos=equipos
+        )
+        
+        
 def start_server():
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -32,28 +43,16 @@ def start_server():
         while True:
             conn, addr = server.accept()
             print(f"Conexión establecida con {addr}")
-            client_thread = threading.Thread(target=handle_client, args=(conn, addr, 'unlock'))
+            client_thread = threading.Thread(target=handle_client, args=(conn, addr ))
             client_thread.start()
     except Exception as e:
         print(f"Error al iniciar el servidor: {e}")
     finally:
         server.close()
 
-
-
-@bp.route("/equipo", methods=["GET", "POST"])
-@login_required
-def equipo():
-    if request.method == "GET":
-        usuario = current_user
-        equipos = Equipo.query.all()
-        return render_template(
-            "administracion/equipo/main.html", usuario=usuario, equipos=equipos
-        )
-
 connected_clients =[]
 
-def handle_client(conn, addr, accion):
+def handle_client(conn, addr):
     global connected_clients
     print(f"Conexión establecida desde {addr}")
 
@@ -74,8 +73,8 @@ def handle_client(conn, addr, accion):
                 print(f"Procesos recibidos desde {addr}: {command['data']}")
                 
             print("antes de enviar accion")
-            response = json.dumps({'action': accion })
-            conn.send(response.encode())
+            #response = json.dumps({'action': accion })
+            #conn.send(response.encode())
 
     except Exception as e:
         print(f"Error manejando el cliente: {e}")
@@ -107,13 +106,13 @@ def pedir_equipo():
             equipo_ip = equipo.ipEquipo 
             server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             
+            return jsonify({"status": "success", "message": f"Computador {pc} registrado y desbloqueado correctamente."})
             try:
                 server.connect((equipo_ip, 5000))  # Conectar al cliente (IP del equipo)
                 accion = 'unlock'
                 response = json.dumps({'action': accion})
                 server.send(response.encode())  # Enviar la acción al cliente
                 server.close()
-                return jsonify({"status": "success", "message": f"Computador {pc} registrado y desbloqueado correctamente."})
             except socket.timeout:
                 print(f"Timeout al intentar conectar con el equipo {pc} en {equipo_ip}")
             except socket.error as se:
@@ -147,17 +146,18 @@ def estado_equipo():
 @bp.route("/equipo/liberar_equipo/<int:idEquipo>", methods=["POST"])
 def liberar_equipo(idEquipo):
     if current_user.is_authenticated:
-        data = request.json  # Obtenemos el cuerpo JSON de la petición
-        idUsuario = data.get('idUsuario')
-        equipo_a_editar = Equipo.query.filter_by(idEquipo=idEquipo).first()  # Busca el equipo
-        editar_historial = Historial.query.filter_by(Usuario_idUsuario=idUsuario, Equipo_idEquipo=idEquipo).first_or_404()
-        
+        data = request.json  # Obtiene el cuerpo JSON de la petición
+        idUsuario = data.get('idUsuario')  # Obtiene el idUsuario
+
+        equipo_a_editar = Equipo.query.filter_by(idEquipo=idEquipo).first()
+        editar_historial = Historial.query.filter_by(Usuario_idUsuario=idUsuario, Equipo_idEquipo=idEquipo, horaFin=None).first_or_404()
+
         # Actualizamos los campos
         equipo_a_editar.estadoEquipo = "libre"
-        editar_historial.horaFin = datetime.now()
-        
+        editar_historial.horaFin = datetime.now()  # Actualiza la hora
+
         try:
-            db.session.commit()  # Guardamos los cambios en la base de datos
+            db.session.commit()
             return jsonify({'success': True, 'message': 'Historial actualizado con la fecha y hora actuales.'})
         except Exception as e:
             db.session.rollback()  # Revertimos en caso de error

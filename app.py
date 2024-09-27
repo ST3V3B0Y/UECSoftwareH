@@ -57,14 +57,15 @@ def index():
             nuevo_equipo = Equipo(
                 idEquipo=i,
                 estadoEquipo="libre",
-                sala="D507"
+                sala="D507",
+                ipEquipo=0
             )
             try:
                 db.session.add(nuevo_equipo)
                 db.session.commit()
-            except IntegrityError:
+            except IntegrityError as e:
                 db.session.rollback()
-                print(f"Error registrando el equipo {i} en sala D507")
+                print(f"Error registrando el equipo {i} en sala D507", e)
 
             
     for i in range(101,135):
@@ -76,7 +77,8 @@ def index():
             nuevo_equipo = Equipo(
                 idEquipo=i,
                 estadoEquipo="libre",
-                sala="H405"
+                sala="H405",
+                ipEquipo=0
             )
             try:
                 db.session.add(nuevo_equipo)
@@ -95,7 +97,8 @@ def index():
             nuevo_equipo = Equipo(
                 idEquipo=i,
                 estadoEquipo="libre",
-                sala="I408"
+                sala="I408",
+                ipEquipo=0
             )
             try:
                 db.session.add(nuevo_equipo)

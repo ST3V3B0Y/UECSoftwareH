@@ -3,8 +3,10 @@ import json
 import psutil
 import ctypes
 
-SERVER_HOST = '10.100.103.170'  # Dirección IP del servidor
+#SERVER_HOST = '10.100.103.142'  # Dirección IP del servidor
+SERVER_HOST = '172.20.14.154'
 SERVER_PORT = 5000
+#SERVER_PORT = 5040
 
 import tkinter as tk
 from PIL import Image, ImageTk  # Pillow para manejar imágenes
