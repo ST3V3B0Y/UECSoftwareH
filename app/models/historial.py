@@ -10,3 +10,4 @@ class Historial(db.Model):
     horaFin = db.Column(db.DateTime, nullable=True)
     Equipo_idEquipo = db.Column(db.Integer, db.ForeignKey('equipo.idEquipo'), nullable=False)
     nombreSala = db.Column(db.String(10), nullable=False)   
+    software_idSoftware = db.Column(db.Integer, db.ForeignKey('software.idSoftware'), nullable=False)

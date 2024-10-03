@@ -21,13 +21,14 @@ def unauthorized_callback():
     return redirect(url_for("usuario.login"))
 
 
-@login_required
+
 @bp.route("/usuario")
 def indexUsuario():
     if current_user.is_authenticated:
         usuarios = Usuario.query.order_by(Usuario.idUsuario.desc()).all()
         return render_template('administracion/usuarios/usuarios.html',usuarios=usuarios)
     else:
+        flash("Inicie sesion para continuar...", "error")
         return redirect(url_for('usuario.login_administracion'))
 
 @bp.route("/register_usuario", methods=["GET", "POST"])

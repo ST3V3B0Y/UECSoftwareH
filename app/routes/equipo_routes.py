@@ -13,6 +13,7 @@ from datetime import datetime
 from app.models import Equipo
 from app.models import Historial
 from app.models import Usuario
+from app.models import Software
 import socket
 import json
 import threading
@@ -26,14 +27,22 @@ def equipo():
     if request.method == "GET":
         usuario = current_user
         equipos = Equipo.query.all()
+        software = Software.query.all()
+        software_list = [{"idSoftware": s.idSoftware, "nombreSoftware": s.nombreSoftware} for s in software]
         return render_template(
-            "administracion/equipo/main.html", usuario=usuario, equipos=equipos
+            "administracion/equipo/main.html", usuario=usuario, equipos=equipos, software=software_list
         )
         
         
 def start_server():
-    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    try:
+        server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        # Código de conexión y comunicación aquí
+    except OSError as e:
+        print(f"Error creando el socket: {e}")
+    finally:
+        server.close()
     HOST = SERVER_HOST  # Asegúrate de que esté escuchando en todas las interfaces de red
     PORT = SERVER_PORT
     try:
@@ -85,7 +94,11 @@ def handle_client(conn, addr):
 @login_required
 def pedir_equipo():
     if request.method == "POST":
-        pc = request.form.get("pc")
+        data = request.get_json()
+        pc = data.get('pc')
+        software = data.get('softwareId')
+        
+        print("Datos recibidos:", data)
         try:
             noRepeatUser = Historial.query.filter(Historial.Usuario_idUsuario==current_user.idUsuario, Historial.horaFin==None).first()
             if noRepeatUser:
@@ -98,13 +111,22 @@ def pedir_equipo():
                 Usuario_idUsuario=current_user.idUsuario,
                 Equipo_idEquipo=pc,
                 nombreSala="D507",
+                software_idSoftware=software
             )
             db.session.add(registro)
             db.session.add(equipo)
             db.session.commit()
             
             equipo_ip = equipo.ipEquipo 
-            server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            try:
+                server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+                
+                # Código de conexión y comunicación aquí
+            except OSError as e:
+                print(f"Error creando el socket: {e}")
+            finally:
+                server.close()
             
             return jsonify({"status": "success", "message": f"Computador {pc} registrado y desbloqueado correctamente."})
             try:

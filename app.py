@@ -14,6 +14,7 @@ from app import create_app,db
 from app.models import Equipo
 from app.routes import equipo_routes
 from app.models import Usuario
+from app.models import Software
 from app.config import SERVER_HOST, SERVER_PORT
 import os
 import socket
@@ -66,6 +67,24 @@ def index():
             except IntegrityError as e:
                 db.session.rollback()
                 print(f"Error registrando el equipo {i} en sala D507", e)
+                
+    software_list = ["ADOBE CC", "SPSS", "ARCGIS", "RISK SIMULATOR", "STATA", "EVIEWS", "NVIVO"]
+
+    for nombre in software_list:
+        # Verifica si el software ya existe en la base de datos
+        software_existente = Software.query.filter_by(nombreSoftware=nombre).first()
+
+        if not software_existente:
+            # Si no existe, lo registramos
+            nuevo_software = Software(
+                nombreSoftware=nombre
+            )
+            try:
+                db.session.add(nuevo_software)
+                db.session.commit()
+            except IntegrityError as e:
+                db.session.rollback()
+                print(f"Error registrando el software {nombre}", e)
 
             
     for i in range(101,135):
@@ -107,6 +126,8 @@ def index():
                 db.session.rollback()
                 print(f"Error registrando el equipo {i} en sala I408")
 
+    
+
     return render_template('index.html')
 
 
@@ -127,6 +148,3 @@ if __name__ == '__main__':
     socket_thread.start()  # Inicia el hilo del servidor de sockets
 
     app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
-
-    # Asegúrate de que el hilo del servidor de sockets se cierre cuando se cierre la aplicación
-    socket_thread.join()

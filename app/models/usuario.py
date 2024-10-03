@@ -10,6 +10,7 @@ class Usuario(db.Model):
     nombreUsuario = db.Column(db.String(256), nullable=False)
     identificacionUsuario = db.Column(db.String(256), nullable=False)
     Facultad_idFacultad = db.Column(db.String(256), nullable=False)
+    historiales = db.relationship('Historial', backref='usuario', lazy=True)
     #es_administrador = db.Column(db.Boolean, default=False)
         
     def __repr__(self):

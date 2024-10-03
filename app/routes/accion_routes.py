@@ -25,6 +25,8 @@ def redireccion():
             return redirect(url_for('equipo.estado_equipo'))
         elif accion == "usuarios":
             return redirect(url_for('usuario.indexUsuario'))
+        elif accion == "software":
+            return redirect(url_for('software.indexSoftware'))
         
 
 
