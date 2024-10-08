@@ -99,28 +99,28 @@
             <div id="pagination-controls" class="flex justify-center my-4"></div>
         </div>
     </div>
-    
+
     <!-- Script de Paginación -->
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            const rowsPerPage = 14;
+            const rowsPerPage = 10;
             const table = document.getElementById('usuarios-tbody');
             const rows = table.getElementsByTagName('tr');
             const totalPages = Math.ceil(rows.length / rowsPerPage);
-    
+
             function displayPage(page) {
                 const start = (page - 1) * rowsPerPage;
                 const end = start + rowsPerPage;
-    
+
                 for (let i = 0; i < rows.length; i++) {
                     rows[i].style.display = i >= start && i < end ? '' : 'none';
                 }
             }
-    
+
             function createPaginationControls() {
                 const paginationControls = document.getElementById('pagination-controls');
                 paginationControls.innerHTML = '';
-    
+
                 for (let i = 1; i <= totalPages; i++) {
                     const btn = document.createElement('button');
                     btn.textContent = i;
@@ -134,11 +134,11 @@
 
             displayPage(1);
             createPaginationControls();
-            
+
             // Inicializar la primera página
         });
     </script>
-    
+
 </body>
 
 </html>

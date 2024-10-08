@@ -32,8 +32,7 @@ def equipo():
         return render_template(
             "administracion/equipo/main.html", usuario=usuario, equipos=equipos, software=software_list
         )
-        
-        
+
 def start_server():
     try:
         server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -75,12 +74,12 @@ def handle_client(conn, addr):
             if not data:
                 print(f"Cliente {addr} desconectado")
                 break
-            
+
             command = json.loads(data)
 
             if command['action'] == 'processes':
                 print(f"Procesos recibidos desde {addr}: {command['data']}")
-                
+
             print("antes de enviar accion")
             #response = json.dumps({'action': accion })
             #conn.send(response.encode())
@@ -97,37 +96,46 @@ def pedir_equipo():
         data = request.get_json()
         pc = data.get('pc')
         software = data.get('softwareId')
-        
+        otroSoftware = data.get('otroSoftware')
+
         print("Datos recibidos:", data)
         try:
             noRepeatUser = Historial.query.filter(Historial.Usuario_idUsuario==current_user.idUsuario, Historial.horaFin==None).first()
             if noRepeatUser:
                 return jsonify({"status": "warning", "message": "El usuario ya tiene asignado un equipo"})
-            
+
             equipo = Equipo.query.filter_by(idEquipo=pc).first()
             equipo.estadoEquipo = "usado"
-                
-            registro = Historial(
+
+            if otroSoftware is None:
+                registro = Historial(
                 Usuario_idUsuario=current_user.idUsuario,
                 Equipo_idEquipo=pc,
                 nombreSala="D507",
                 software_idSoftware=software
             )
+            else :
+                registro = Historial(
+                Usuario_idUsuario=current_user.idUsuario,
+                Equipo_idEquipo=pc,
+                nombreSala="D507",
+                software_idSoftware=software,
+                otroSoftware=otroSoftware
+                )
             db.session.add(registro)
             db.session.add(equipo)
             db.session.commit()
-            
-            equipo_ip = equipo.ipEquipo 
+
+            equipo_ip = equipo.ipEquipo
             try:
                 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-                
                 # Código de conexión y comunicación aquí
             except OSError as e:
                 print(f"Error creando el socket: {e}")
             finally:
                 server.close()
-            
+
             return jsonify({"status": "success", "message": f"Computador {pc} registrado y desbloqueado correctamente."})
             try:
                 server.connect((equipo_ip, 5000))  # Conectar al cliente (IP del equipo)
@@ -154,17 +162,19 @@ def estado_equipo():
             return "hola"
         else:
             equiposUsados = (
-                db.session.query(Usuario.nombreUsuario, Usuario.identificacionUsuario, Equipo.idEquipo, Historial.horaInicio, Historial.horaFin, Historial.nombreSala, Historial.Usuario_idUsuario)
+                db.session.query(Usuario.nombreUsuario, Usuario.identificacionUsuario, Equipo.idEquipo, Historial.horaInicio, Historial.horaFin, Historial.nombreSala, Historial.Usuario_idUsuario, Software.nombreSoftware, Historial.otroSoftware)
                 .join(Historial, Historial.Usuario_idUsuario == Usuario.idUsuario)
                 .join(Equipo, Historial.Equipo_idEquipo == Equipo.idEquipo)
+                .join(Software, Historial.software_idSoftware == Software.idSoftware)
                 .filter(Historial.horaFin == None)
                 .all()
             )
+            print("informacion de la tabla",equiposUsados)
             cantidadEquipos = len(equiposUsados)
             return render_template("administracion/estadoEquipo/index.html", equipos_usados=equiposUsados, cantidad_equipos=cantidadEquipos)
     else:
         return redirect(url_for('usuario.login_administracion'))
-    
+
 @bp.route("/equipo/liberar_equipo/<int:idEquipo>", methods=["POST"])
 def liberar_equipo(idEquipo):
     if current_user.is_authenticated:
@@ -176,7 +186,7 @@ def liberar_equipo(idEquipo):
 
         # Actualizamos los campos
         equipo_a_editar.estadoEquipo = "libre"
-        editar_historial.horaFin = datetime.now()  # Actualiza la hora
+        editar_historial.horaFin = datetime.now().strftime('%H:%M') # Actualiza la hora
 
         try:
             db.session.commit()
@@ -187,21 +197,20 @@ def liberar_equipo(idEquipo):
             return jsonify({'success': False, 'message': 'Error al actualizar el historial.'})
     else:
         return jsonify({'success': False, 'message': 'No estás autenticado.'})
-    
+
 @bp.route("/equipo/liberar_todo/", methods=["POST"])
 def liberar_todo():
     if current_user.is_authenticated:
         editar_historial_D507 = Historial.query.filter(Historial.horaFin==None, Equipo.sala=="D507").all()
         editar_equipo_D507 = Equipo.query.filter(Equipo.estadoEquipo=="usado", Equipo.sala=="D507").all()
-        
+
         for equipo in editar_equipo_D507:
             equipo.estadoEquipo = "libre"
-        
+
         # Actualizar los campos de cada equipo y registro del historial
         for historial in editar_historial_D507:
-            historial.horaFin = datetime.now()
-            
-        
+            historial.horaFin = datetime.now().strftime('%H:%M')
+
         try:
             db.session.commit()  # Guardamos los cambios en la base de datos
             return jsonify({'success': True, 'message': 'Historial actualizado con la fecha y hora actuales.'})

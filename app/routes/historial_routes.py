@@ -11,6 +11,7 @@ from flask_login import (
 from app.models import Historial
 from app.models import Equipo
 from app.models import Usuario
+from app.models import Software
 
 
 bp = Blueprint("historial", __name__)
@@ -19,13 +20,13 @@ bp = Blueprint("historial", __name__)
 def indexHistorial():
     if current_user.is_authenticated:
         el_historial = (
-                db.session.query(Usuario.nombreUsuario,Usuario.identificacionUsuario, Equipo.idEquipo, Historial.horaInicio, Historial.horaFin, Historial.nombreSala)
+                db.session.query(Usuario.nombreUsuario, Usuario.identificacionUsuario, Equipo.idEquipo, Historial.horaInicio, Historial.horaFin, Historial.nombreSala, Historial.Usuario_idUsuario, Software.nombreSoftware, Historial.otroSoftware)
                 .join(Historial, Historial.Usuario_idUsuario == Usuario.idUsuario)
                 .join(Equipo, Historial.Equipo_idEquipo == Equipo.idEquipo)
+                .join(Software, Historial.software_idSoftware == Software.idSoftware)
                 .filter(Historial.horaFin.isnot(None))
                 .all()
         )
-        hola = Historial.query.filter(Historial.horaFin.isnot(None)).all()        
         print("historial ", el_historial)
         return render_template('administracion/historial/index.html',historial=el_historial)
     else:

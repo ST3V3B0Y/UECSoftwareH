@@ -86,6 +86,7 @@
                                                 <th class="border-b border-slate-300 p-4 pl-4 text-slate-500 text-left">Sala</th>
                                                 <th class="border-b border-slate-300 p-4 pl-4 text-slate-500 text-left">Equipo</th>
                                                 <th class="border-b border-slate-300 p-4 pl-4 text-slate-500 text-left">Fecha Ingreso</th>
+                                                <th class="border-b border-slate-300 p-4 pl-4 text-slate-500 text-left">Software</th>
                                                 <th class="border-b border-slate-300 p-4 pl-4 text-slate-500 text-left">Accion</th>
                                             </tr>
                                         </thead>
@@ -98,16 +99,28 @@
                                                         <td class="border-b border-slate-300 p-4 text-slate-500">{{ equipo[5] }}</td> <!-- Sala -->
                                                         <td class="border-b border-slate-300 p-4 pr-8 text-slate-500" id="idEquipo">{{ equipo[2] }}</td> <!-- ID del Equipo -->
                                                         <td class="border-b border-slate-300 p-4 pr-8 text-slate-500">{{ equipo[3] }}</td> <!-- Fecha de Ingreso -->
+                                                        <td class="contenido border-b border-slate-300 p-4 pr-8 text-slate-500">
+                                                            {% if equipo[7]=="OTRO" %}
+                                                                {{ equipo[8] }}
+                                                            {% else %}
+                                                                {{ equipo[7] }}
+                                                            {% endif %}
+                                                        </td> <!-- Software -->
                                                         <td class="border-b border-slate-300 p-4 pr-8 text-slate-500">
                                                             <button class="text-white rounded-lg text-center liberar-btn" data-id="{{ equipo[6] }}" style="background-color: rgba(0, 46, 25, .8);"><!--ID Usuario registrado al equipo-->
                                                                 <p class="p-3">Liberar</p>
                                                             </button>
                                                         </td> <!-- Botones -->
                                                     </tr>
-                                                {% endfor %}
-                                            </tbody>  
+                                                    {% endfor %}
+                                                    <script>
+                                                        const celdasContenido = document.querySelectorAll('.contenido');
+                                                        celdasContenido.forEach((celda) => {
+                                                            celda.textContent = celda.textContent.toUpperCase().trim()
+                                                        });
+                                                    </script>
+                                            </tbody>
                                         </form>
-                                        
                                     </table>
                                 </div>
                             </div>
@@ -119,37 +132,34 @@
             <div id="pagination-controls" class="flex justify-center my-4"></div>
         </div>
     </div>
-    
+
 
     <!-- Script de Busqueda -->
     <script>
 
     </script>
-    
+
     <!-- Script de Paginación -->
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            const rowsPerPage = 14;
+            const rowsPerPage = 10;
             const table = document.getElementById('usuarios-tbody');
             const rows = table.getElementsByTagName('tr');
             const totalPages = Math.ceil(rows.length / rowsPerPage);
-            
-            
-
 
             function displayPage(page) {
                 const start = (page - 1) * rowsPerPage;
                 const end = start + rowsPerPage;
-    
+
                 for (let i = 0; i < rows.length; i++) {
                     rows[i].style.display = i >= start && i < end ? '' : 'none';
                 }
             }
-    
+
             function createPaginationControls() {
                 const paginationControls = document.getElementById('pagination-controls');
                 paginationControls.innerHTML = '';
-    
+
                 for (let i = 1; i <= totalPages; i++) {
                     const btn = document.createElement('button');
                     btn.textContent = i;
@@ -163,8 +173,7 @@
 
             displayPage(1);
             createPaginationControls();
-            
-            // Inicializar la primera página
+
         });
     </script>
     <!-- Script de SweetAlert2 y liberacion de equipos -->

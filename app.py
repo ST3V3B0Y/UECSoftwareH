@@ -10,6 +10,7 @@ from flask_login import (
     current_user,
 )
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy import text
 from app import create_app,db
 from app.models import Equipo
 from app.routes import equipo_routes
@@ -20,11 +21,10 @@ import os
 import socket
 import threading
 import json
-import psutil
 import ctypes
 import signal
 from app.routes.equipo_routes import start_server
-app = create_app()  
+app = create_app()
 
 @app.route("/")
 def index():
@@ -67,8 +67,13 @@ def index():
             except IntegrityError as e:
                 db.session.rollback()
                 print(f"Error registrando el equipo {i} en sala D507", e)
-                
+
     software_list = ["ADOBE CC", "SPSS", "ARCGIS", "RISK SIMULATOR", "STATA", "EVIEWS", "NVIVO"]
+    software=Software.query.filter_by(idSoftware=200).first()
+    if not software:
+        otroSoftware = db.session.execute(text('INSERT INTO Software (idSoftware, nombreSoftware) VALUES (200, :software)'),{'software': "OTRO"})
+        db.session.commit()
+
 
     for nombre in software_list:
         # Verifica si el software ya existe en la base de datos
@@ -86,7 +91,7 @@ def index():
                 db.session.rollback()
                 print(f"Error registrando el software {nombre}", e)
 
-            
+
     for i in range(101,135):
         # Verifica si el equipo ya existe en la base de datos
         equipo_existente = Equipo.query.filter_by(idEquipo=i, sala="H405").first()

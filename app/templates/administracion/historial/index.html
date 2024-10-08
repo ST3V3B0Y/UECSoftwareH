@@ -81,6 +81,7 @@
                                             <th class="border-b border-slate-300 p-4 pl-4 text-slate-500 text-left">Equipo</th>
                                             <th class="border-b border-slate-300 p-4 pl-4 text-slate-500 text-left">Fecha Ingreso</th>
                                             <th class="border-b border-slate-300 p-4 pl-4 text-slate-500 text-left">Fecha Salida</th>
+                                            <th class="border-b border-slate-300 p-4 pl-4 text-slate-500 text-left">Software</th>
                                         </tr>
                                     </thead>
                                     <tbody id="usuarios-tbody" class="bg-slate-100">
@@ -91,9 +92,22 @@
                                             <td class="border-b border-slate-300 p-4 text-slate-500">{{ el_historial[5] }}</td> <!-- Sala -->
                                             <td class="idEquipo border-b border-slate-300 p-4 pr-8 text-slate-500">{{ el_historial[2] }}</td> <!-- ID del Equipo -->
                                             <td class="border-b border-slate-300 p-4 pr-8 text-slate-500">{{ el_historial[3] }}</td> <!-- Fecha de Ingreso -->
-                                            <td class="border-b border-slate-300 p-4 pr-8 text-slate-500">{{ el_historial[4] }}</td> <!-- Fecha de Ingreso -->
+                                            <td class="border-b border-slate-300 p-4 pr-8 text-slate-500">{{ el_historial[4] }}</td> <!-- Fecha de Salida -->
+                                            <td class="contenido border-b border-slate-300 p-4 pr-8 text-slate-500">
+                                                {% if el_historial[7]=="OTRO" %}
+                                                    {{ el_historial[8] }}
+                                                {% else %}
+                                                    {{ el_historial[7] }}
+                                                {% endif %}
+                                            </td> <!-- Software -->
                                         </tr>
                                         {% endfor %}
+                                        <script>
+                                            const celdasContenido = document.querySelectorAll('.contenido');
+                                            celdasContenido.forEach((celda) => {
+                                                celda.textContent = celda.textContent.toUpperCase().trim()
+                                            });
+                                        </script>
                                     </tbody>
                                 </table>
                             </div>
@@ -105,25 +119,28 @@
             <div id="pagination-controls" class="flex justify-center my-4"></div>
         </div>
     </div>
-    
+
     <!-- Script de Paginación -->
     <script>
-        document.addEventListener("DOMContentLoaded", function() {  
-            const rowsPerPage = 14;
+        document.addEventListener("DOMContentLoaded", function() {
+            const rowsPerPage = 10;
+            const table = document.getElementById('usuarios-tbody');
             const rows = table.getElementsByTagName('tr');
+            const totalPages = Math.ceil(rows.length / rowsPerPage);
+
             function displayPage(page) {
                 const start = (page - 1) * rowsPerPage;
                 const end = start + rowsPerPage;
-    
+
                 for (let i = 0; i < rows.length; i++) {
                     rows[i].style.display = i >= start && i < end ? '' : 'none';
                 }
             }
-            
+
             function createPaginationControls() {
                 const paginationControls = document.getElementById('pagination-controls');
                 paginationControls.innerHTML = '';
-    
+
                 for (let i = 1; i <= totalPages; i++) {
                     const btn = document.createElement('button');
                     btn.textContent = i;
@@ -137,11 +154,10 @@
 
             displayPage(1);
             createPaginationControls();
-            
-            // Inicializar la primera página
+
         });
     </script>
-    
+
 </body>
 
 </html>

@@ -59,7 +59,7 @@
                             {% if equipo.idEquipo==i %}
                             {% if equipo.estadoEquipo == "usado" %}
                             <a style="padding: 24.5px; padding-bottom: 18px; padding-top: 17px" class="cta__right_usado" value="{{ i }}" name="action" onclick="equipoUsado({{ i }})">
-                                {{ i  }} 
+                                {{ i  }}
                             </a>
                             {% else %}
                             <button  style="padding: 24.5px; padding-bottom: 18px; padding-top: 17px" class="cta__right" value="{{ i }}" name="action" onclick="confirmarPrestamo({{ i }})">
@@ -111,7 +111,7 @@
                                 {{ i  }} 
                             </a>
                             {% else %}
-                            <button  style="padding: 24.5px; padding-bottom: 18px; padding-top: 17px" class="cta__right" value="{{ i }}" name="action" onclick="confirmarPrestamo({{ i }})">
+                            <button  style="padding: 24.5px; padding-bottom: 18px; padding-top: 17px" class="cta__right " value="{{ i }}" name="action" onclick="confirmarPrestamo({{ i }})">
                                 {{ i }}
                             </button>
                             {% endif %}
@@ -352,22 +352,22 @@
     </div>
     <script>
         function confirmarPrestamo(equipoId) {
-
             const softwares = {{ software|tojson }};
-            // Obtener los softwares desde tu tabla (esto debe ser adaptado a tu implementación)
-            // Esto puede ser un array que traigas de tu backend
-        
+            
             // Crear el HTML del select
             let selectHtml = '<select id="softwareSelect" class="swal2-select" required>';
             softwares.forEach(software => {
                 selectHtml += `<option value="${software.idSoftware}">${software.nombreSoftware}</option>`;
             });
             selectHtml += '</select>';
-        
+            
+            // Crear un contenedor para el input adicional
+            selectHtml += '<div id="otroSoftwareContainer" style="margin-top: 10px;"></div>';
+            
             Swal.fire({
-                title: '¿Que Software usaras?',
+                title: '¿Qué software usarás?',
                 text: "¿Deseas pedir el equipo " + equipoId + "?",
-                html: selectHtml,  // Añadir el select aquí
+                html: selectHtml,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -378,7 +378,8 @@
                 if (result.isConfirmed) {
                     // Obtener el ID del software seleccionado
                     const softwareId = document.getElementById('softwareSelect').value;
-        
+                    const otroSoftwareNombre = document.getElementById('otroSoftware') ? document.getElementById('otroSoftware').value : null;
+                    
                     // Crear un formulario y enviarlo usando AJAX
                     $.ajax({
                         url: "{{ url_for('equipo.pedir_equipo') }}",
@@ -386,8 +387,9 @@
                         contentType: 'application/json',
                         data: JSON.stringify({
                             pc: equipoId,
-                            softwareId: softwareId // Asegúrate de que `softwareId` esté definido correctamente
-                        }), // Enviar el ID del software seleccionado
+                            softwareId: softwareId,
+                            otroSoftware: otroSoftwareNombre  // Si existe, enviar el nombre del software "otro"
+                        }),
                         success: function (response) {
                             if (response.status === 'success') {
                                 Swal.fire({
@@ -426,17 +428,34 @@
                     });
                 }
             });
+    
+            // Agregar un event listener al select para detectar el cambio
+            document.addEventListener('change', function (e) {
+                if (e.target && e.target.id === 'softwareSelect') {
+                    const selectedValue = e.target.value;
+                    
+                    // Si el valor seleccionado es '200', añadir el campo de texto
+                    if (selectedValue == '200') {
+                        document.getElementById('otroSoftwareContainer').innerHTML = '<h2 class="swal2-title text-2xl">¿Cual? <br>(Orange, PowerBI, Internet, Office)</h2><input type="text" id="otroSoftware" class="swal2-input" placeholder="Ingrese el nombre del software">';
+                    } else {
+                        // Si no, remover el campo de texto si existe
+                        document.getElementById('otroSoftwareContainer').innerHTML = '';
+                    }
+                }
+            });
         }
+        
         function equipoUsado(equipoId){
             Swal.fire({
                 title: '¡Equipo en uso!',
-                text: "El equipo " + equipoId + " ya esta en uso",
+                text: "El equipo " + equipoId + " ya está en uso",
                 icon: 'warning',
                 showCancelButton: false,
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'Volver',
-            })
+            });
         }
+        
         function reload(){
             window.location.reload();
         }
