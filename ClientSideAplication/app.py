@@ -4,13 +4,13 @@ import psutil
 import ctypes
 
 #SERVER_HOST = '10.100.103.142'  # Dirección IP del servidor
-SERVER_HOST = '172.20.14.154'
-SERVER_PORT = 5000
+SERVER_HOST = '10.33.0.93'
+SERVER_PORT = 5040
 #SERVER_PORT = 5040
 
 import tkinter as tk
-from PIL import Image, ImageTk  # Pillow para manejar imágenes
-from pynput import mouse, keyboard
+#from PIL import Image, ImageTk  # Pillow para manejar imágenes
+#from pynput import mouse, keyboard
 import threading
 
 
