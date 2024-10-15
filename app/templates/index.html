@@ -61,17 +61,54 @@
       <h1>SALA DE SOFTWARE ESPECIALIZADA</h1>
       <a href="{{url_for('usuario.login')}}" style="text-decoration: none;"><i class="fa-solid fa-person-running"></i>
         Registro</a>
-      <a href="{{ url_for('accion.celular') }}" class="ctaa"><i
-          class="fa-solid fa-arrow-right"></i>Preguntas Frecuentes</a>
+      <!--<a href="{{ url_for('accion.celular') }}" class="ctaa">-->
+        <a href="#" class="ctaa" id="Novedades">
+          <i class="fa-solid fa-arrow-right"></i>Novedades!
+        </a>
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     </div>
 
-    <div class="hero-img">
-      <img src="{{url_for('static',filename='../static/images/pngwing.com.png')}}">
+    <div class="">
+      <div class="w-full h-full">
+        <div>
+          <img id="Img" style="transition: transform 700ms ease-in-out;" class="w-11/12 pb-20 relative z-0 rounded-b-full rounded-tl-full" src="{{url_for('static',filename='../static/images/IMG SALA D.jpg')}}">
+          <div id="Texto" style="transition: opacity 500ms ease-in-out;" class="relative z-0 opacity-0 hidden rounded-2xl p-16 bg-white">
+            Nuevos Equipos De Ultima Tecnologia!
+          </div>
+        </div>
+      </div>
     </div>
-  </section>
-  <!--Fin Letras Bienvenida-->
-
-</body>
-
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+      const Imagen = document.getElementById("Img");
+      const Texto = document.getElementById("Texto");
+    
+      document.getElementById("Novedades").addEventListener("click", function() {
+        // Desplazar la imagen a la derecha
+        Imagen.classList.add("translate-x-full");
+        
+        // Espera un poco antes de ocultar la imagen y mostrar el texto
+        setTimeout(() => {
+          Imagen.classList.add("hidden");
+          // Remover la clase opacity-0 del texto y mostrarlo
+          Texto.classList.remove("opacity-0");
+          Texto.classList.remove("hidden");
+        }, 300); // Tiempo que coincide con la duración de la transición   
+    
+        // Ocultar el texto después de un tiempo
+        setTimeout(() => {
+          Texto.classList.add("hidden");
+          Texto.classList.add("opacity-0");
+        }, 5000);
+        setTimeout(() => {
+          Imagen.classList.remove("hidden");
+        }, 5990);
+        // Restaurar la imagen después de un tiempo
+        setTimeout(() => {
+          Imagen.classList.remove("translate-x-full");
+        }, 6000);
+      });
+    </script>
 </html>

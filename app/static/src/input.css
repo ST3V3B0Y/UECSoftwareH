@@ -13,10 +13,12 @@
 
 body{
     overflow: scroll;
-    min-height: 100vh;
+    min-height: 90vh;
     background: linear-gradient(245.59deg, #4d9559 0%, #38703d 28.53%, #133917 75.52%);
 }
-
+.div{
+    background: linear-gradient(245.59deg, #4d9559 0%, #38703d 28.53%, #133917 75.52%);
+}
 .filtro{
     display: none;
 }
