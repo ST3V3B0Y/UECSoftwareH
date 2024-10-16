@@ -16,7 +16,7 @@ Este software está diseñado para gestionar el préstamo de equipos en un entor
 1. **Instalación de Dependencias:**
    Asegúrate de tener Python y pip instalados en tu máquina. Luego, clona el repositorio y navega hasta la carpeta del proyecto:
    
-       git clone <URL_DEL_REPOSITORIO>
+       git clone https://github.com/JorgeBestDev/UEC-Flask.git
        cd <NOMBRE_DEL_PROYECTO>
    
 Instala las dependencias requeridas:
