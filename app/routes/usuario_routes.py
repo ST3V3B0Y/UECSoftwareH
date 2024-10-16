@@ -83,11 +83,14 @@ def register_usuario():
             try:
                 db.session.add(usuario)
                 db.session.commit()
-                login_usuario()
-                flash("Registrado Correctamente", "success")
+                usuarioActual = Usuario.query.filter_by(
+                    identificacionUsuario=documento
+                ).first()
+                login_user(usuarioActual)
+                print("usuario actual ",current_user)
                 return redirect(
                     url_for(
-                        "usuario.login_usuario",
+                        "equipo.equipo",
                     )
                 )
             except IntegrityError as e:

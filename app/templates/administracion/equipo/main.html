@@ -355,8 +355,9 @@
             const softwares = {{ software|tojson }};
             
             // Crear el HTML del select
-            let selectHtml = '<select id="softwareSelect" class="swal2-select" required>';
+            let selectHtml = '<select id="softwareSelect" name="software" class="swal2-select" required><option value="0" selected disabled>Que Software usaras?</option>';
             softwares.forEach(software => {
+                
                 selectHtml += `<option value="${software.idSoftware}">${software.nombreSoftware}</option>`;
             });
             selectHtml += '</select>';

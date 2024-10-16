@@ -34,60 +34,6 @@ def equipo():
             "administracion/equipo/main.html", usuario=usuario, equipos=equipos, software=software_list
         )
 
-def start_server():
-    try:
-        server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        # Código de conexión y comunicación aquí
-    except OSError as e:
-        print(f"Error creando el socket: {e}")
-    finally:
-        server.close()
-    HOST = SERVER_HOST  # Asegúrate de que esté escuchando en todas las interfaces de red
-    PORT = SERVER_PORT
-    try:
-        server.bind((HOST, PORT))
-        server.listen()
-        print(f"Servidor escuchando en {HOST}:{PORT}")
-        while True:
-            conn, addr = server.accept()
-            print(f"Conexión establecida con {addr}")
-            client_thread = threading.Thread(target=handle_client, args=(conn, addr ))
-            client_thread.start()
-    except Exception as e:
-        print(f"Error al iniciar el servidor: {e}")
-    finally:
-        server.close()
-
-connected_clients =[]
-
-def handle_client(conn, addr):
-    global connected_clients
-    print(f"Conexión establecida desde {addr}")
-
-    connected_clients.append({'ip': addr[0], 'conn': conn})
-    print(f"Equipos conectados: {[client['ip'] for client in connected_clients]}")
-
-    try:
-        while True:
-            print("entra a while")
-            data = conn.recv(1024).decode()
-            if not data:
-                print(f"Cliente {addr} desconectado")
-                break
-
-            command = json.loads(data)
-
-            if command['action'] == 'processes':
-                print(f"Procesos recibidos desde {addr}: {command['data']}")
-
-            print("antes de enviar accion")
-            #response = json.dumps({'action': accion })
-            #conn.send(response.encode())
-
-    except Exception as e:
-        print(f"Error manejando el cliente: {e}")
-    finally:
-        conn.close()  # Asegúrate de cerrar el socket aquí
 
 @bp.route("/equipo/pedir_equipo", methods=["GET", "POST"])
 @login_required
@@ -95,6 +41,7 @@ def pedir_equipo():
     if request.method == "POST":
         data = request.get_json()
         pc = data.get('pc')
+        software_seleccionado = request.form.get('software')
         software = data.get('softwareId')
         otroSoftware = data.get('otroSoftware')
 
@@ -106,24 +53,26 @@ def pedir_equipo():
 
             equipo = Equipo.query.filter_by(idEquipo=pc).first()
             equipo.estadoEquipo = "usado"
-
-            if otroSoftware is None:
-                registro = Historial(
-                Usuario_idUsuario=current_user.idUsuario,
-                horaInicio=datetime.now().strftime('%H:%M:%S'),
-                Equipo_idEquipo=pc,
-                nombreSala="D507",
-                software_idSoftware=software
-            )
-            else :
-                registro = Historial(
-                Usuario_idUsuario=current_user.idUsuario,
-                horaInicio=datetime.now().strftime('%H:%M:%S'),
-                Equipo_idEquipo=pc,
-                nombreSala="D507",
-                software_idSoftware=software,
-                otroSoftware=otroSoftware
+            if software_seleccionado==0:
+                return jsonify({"status": "warning", "message": "Por favor selecciona un software"})
+            else: 
+                if otroSoftware is None:
+                    registro = Historial(
+                    Usuario_idUsuario=current_user.idUsuario,
+                    horaInicio=datetime.now().strftime('%H:%M:%S'),
+                    Equipo_idEquipo=pc,
+                    nombreSala="D507",
+                    software_idSoftware=software
                 )
+                else :
+                    registro = Historial(
+                    Usuario_idUsuario=current_user.idUsuario,
+                    horaInicio=datetime.now().strftime('%H:%M:%S'),
+                    Equipo_idEquipo=pc,
+                    nombreSala="D507",
+                    software_idSoftware=software,
+                    otroSoftware=otroSoftware
+                    )
             db.session.add(registro)
             db.session.add(equipo)
             db.session.commit()
@@ -138,22 +87,10 @@ def pedir_equipo():
                 server.close()
 
             return jsonify({"status": "success", "message": f"Computador {pc} registrado y desbloqueado correctamente."})
-            try:
-                server.connect((equipo_ip, 5000))  # Conectar al cliente (IP del equipo)
-                accion = 'unlock'
-                response = json.dumps({'action': accion})
-                server.send(response.encode())  # Enviar la acción al cliente
-                server.close()
-            except socket.timeout:
-                print(f"Timeout al intentar conectar con el equipo {pc} en {equipo_ip}")
-            except socket.error as se:
-                print(f"Error de socket: {se}")
-            except Exception as e:
-                print(f"Error al conectar con el equipo {pc} en {equipo_ip}: {e}")
         except IntegrityError as e:
             print("error en registro pc: ", e)
             db.session.rollback()
-            return jsonify({"status": "error", "message": "Error en registro"})
+            return jsonify({"status": "error", "message": "Complete todos los campos"})
 
 
 @bp.route("/equipo/estado_equipo", methods=["GET", "POST"])
@@ -171,7 +108,9 @@ def estado_equipo():
                     Equipo.idEquipo==equipo_a_buscar,
                     Usuario.nombreUsuario.ilike(f"%{equipo_a_buscar}%"),
                     Usuario.identificacionUsuario==equipo_a_buscar
-                    )).all()
+                    ))
+                .order_by(Historial.fecha.desc(), Historial.horaInicio.desc())
+                .all()
             )
             print("consulta para buscar",buscar)
             cantidadEquipos = len(buscar)
