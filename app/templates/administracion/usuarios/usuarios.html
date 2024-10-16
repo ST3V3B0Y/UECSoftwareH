@@ -61,11 +61,12 @@
             </p>
         </div>
         <div class="bg-white shadow-md p-10 rounded-b-xl">
-            <div class="form__group my-5">
-                <input type="text" name="usuario" id="search-input" class="form__input" placeholder=" " required>
+            <form class="form__group my-5 flex flex-row" method="POST">
+                <input type="text" name="usuario" id="search-input" class="form__input" required>
                 <label style="font-size: 1.2rem;" for="search-input" class="form__label">Busqueda</label>
                 <span class="form__line"></span>
-            </div>
+                <button class="text-white rounded-lg text-center px-5 mx-5" style="background-color: rgba(0, 46, 25, .8);">Buscar</button>
+            </form>
             <!-- Tabla que se ajusta al contenido -->
             <div id="tabla">
                 <div class="not-prose relative rounded-xl bg-slate-100">
@@ -83,9 +84,9 @@
                                     <tbody id="usuarios-tbody" class="bg-slate-100">
                                         {% for usuario in usuarios %}
                                             <tr class="elemento">
-                                                <td class="border-b border-slate-300 p-4 pl-8 text-slate-500">{{ usuario.identificacionUsuario }}</td>
-                                                <td class="border-b border-slate-300 p-4 text-slate-500">{{ usuario.nombreUsuario }}</td>
-                                                <td class="border-b border-slate-300 p-4 pr-8 text-slate-500">{{ usuario.facultad }}Facultad</td>
+                                                <td class="border-b border-slate-300 p-4 pl-8 text-slate-500">{{ usuario[0] }}</td>
+                                                <td class="border-b border-slate-300 p-4 text-slate-500">{{ usuario[1] }}</td>
+                                                <td class="border-b border-slate-300 p-4 pr-8 text-slate-500">{{ usuario[2] }}</td>
                                             </tr>
                                         {% endfor %}
                                     </tbody>

@@ -64,13 +64,13 @@
             <p class="text-black ">
                 Busqueda de registros por equipo o cedula
             </p>
-            <div class="form__group my-5 flex flex-row">
-                <input type="text" name="usuario" id="search-input" class="form__input" autofocus placeholder=" " required>
+            <form class="form__group my-5 flex flex-row" method="POST">
+                <input type="text" name="equipo" id="search-input" class="form__input" autofocus required>
                 <label style="font-size: 1.2rem;" for="search-input" class="form__label">Busqueda</label>
                 <span class="form__line"></span>
                 <button class="text-white rounded-lg text-center px-5 mx-5" style="background-color: rgba(0, 46, 25, .8);">Buscar</button>
                 <button class="text-white rounded-lg text-center px-5 mx-5" style="background-color: rgba(0, 46, 25, .8);" id="liberar_todos">Liberar todos</button>
-            </div>
+            </form>
             <!-- Tabla que se ajusta al contenido -->
             <div id="tabla">
                 <form action="" method="post">
@@ -85,7 +85,8 @@
                                                 <th class="border-b border-slate-300 p-4 pl-4 text-slate-500 text-left">Documento</th>
                                                 <th class="border-b border-slate-300 p-4 pl-4 text-slate-500 text-left">Sala</th>
                                                 <th class="border-b border-slate-300 p-4 pl-4 text-slate-500 text-left">Equipo</th>
-                                                <th class="border-b border-slate-300 p-4 pl-4 text-slate-500 text-left">Fecha Ingreso</th>
+                                                <th class="border-b border-slate-300 p-4 pl-4 text-slate-500 text-left">Fecha</th>
+                                                <th class="border-b border-slate-300 p-4 pl-4 text-slate-500 text-left">Hora Ingreso</th>
                                                 <th class="border-b border-slate-300 p-4 pl-4 text-slate-500 text-left">Software</th>
                                                 <th class="border-b border-slate-300 p-4 pl-4 text-slate-500 text-left">Accion</th>
                                             </tr>
@@ -96,18 +97,19 @@
                                                     <tr class="elemento">
                                                         <td class="border-b border-slate-300 p-4 pl-8 text-slate-500">{{ equipo[0] }}</td> <!-- NombreUsuario -->
                                                         <td class="border-b border-slate-300 p-4 pl-8 text-slate-500">{{ equipo[1] }}</td> <!-- identificacionUsuario -->
-                                                        <td class="border-b border-slate-300 p-4 text-slate-500">{{ equipo[5] }}</td> <!-- Sala -->
+                                                        <td class="border-b border-slate-300 p-4 text-slate-500">{{ equipo[4] }}</td> <!-- Sala -->
                                                         <td class="border-b border-slate-300 p-4 pr-8 text-slate-500" id="idEquipo">{{ equipo[2] }}</td> <!-- ID del Equipo -->
-                                                        <td class="border-b border-slate-300 p-4 pr-8 text-slate-500">{{ equipo[3] }}</td> <!-- Fecha de Ingreso -->
+                                                        <td class="border-b border-slate-300 p-4 pr-8 text-slate-500">{{ equipo[8] }}</td> <!-- Fecha -->
+                                                        <td class="border-b border-slate-300 p-4 pr-8 text-slate-500">{{ equipo[3] }}</td> <!-- Hora de Ingreso -->
                                                         <td class="contenido border-b border-slate-300 p-4 pr-8 text-slate-500">
-                                                            {% if equipo[7]=="OTRO" %}
-                                                                {{ equipo[8] }}
+                                                            {% if equipo[5]=="OTRO" %}
+                                                                {{ equipo[6] }}
                                                             {% else %}
-                                                                {{ equipo[7] }}
+                                                                {{ equipo[5] }}
                                                             {% endif %}
                                                         </td> <!-- Software -->
                                                         <td class="border-b border-slate-300 p-4 pr-8 text-slate-500">
-                                                            <button class="text-white rounded-lg text-center liberar-btn" data-id="{{ equipo[6] }}" style="background-color: rgba(0, 46, 25, .8);"><!--ID Usuario registrado al equipo-->
+                                                            <button class="text-white rounded-lg text-center liberar-btn" data-id="{{ equipo[7] }}" style="background-color: rgba(0, 46, 25, .8);"><!--ID Usuario registrado al equipo-->
                                                                 <p class="p-3">Liberar</p>
                                                             </button>
                                                         </td> <!-- Botones -->
@@ -224,7 +226,7 @@
                 }
             })
         }
-    
+
         function actualizarHistorial(idUsuario, idEquipo) {
             fetch(`/equipo/liberar_equipo/${idEquipo}`, {
                 method: 'POST',
@@ -268,7 +270,7 @@
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
+
 </body>
 
 </html>

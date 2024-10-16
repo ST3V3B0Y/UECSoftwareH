@@ -8,6 +8,7 @@ from flask_login import (
     current_user,
 )
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy import or_
 from werkzeug.security import check_password_hash, generate_password_hash
 from app import db, login_manager
 from app.models.facultad import Facultad
@@ -22,14 +23,33 @@ def unauthorized_callback():
 
 
 
-@bp.route("/usuario")
+@bp.route("/usuario", methods=['GET','POST'])
 def indexUsuario():
     if current_user.is_authenticated:
-        usuarios = Usuario.query.order_by(Usuario.idUsuario.desc()).all()
-        return render_template('administracion/usuarios/usuarios.html',usuarios=usuarios)
+        if request.method=='GET':
+            usuarios = (db.session.query(Usuario.identificacionUsuario, Usuario.nombreUsuario, Facultad.nombreFacultad)
+                        .join(Usuario, Usuario.Facultad_idFacultad==Facultad.idFacultad).all())
+            return render_template('administracion/usuarios/usuarios.html',usuarios=usuarios)
+        if request.method=='POST':
+            usuario_a_buscar = request.form.get('usuario')
+            usuarios = (
+                db.session.query(Usuario.identificacionUsuario, Usuario.nombreUsuario, Facultad.nombreFacultad)
+                .join(Facultad, Usuario.Facultad_idFacultad==Facultad.idFacultad)
+                .filter(
+                    or_(
+                        Usuario.nombreUsuario.ilike(f"%{usuario_a_buscar}%"),
+                        Usuario.identificacionUsuario == usuario_a_buscar,
+                        Facultad.nombreFacultad.ilike(f"%{usuario_a_buscar}%")
+                    )).all()
+                )
+            print("usuario a buscar",usuario_a_buscar)
+            print("usuario busqueda",usuarios)
+            return render_template('administracion/usuarios/usuarios.html',usuarios=usuarios)
     else:
         flash("Inicie sesion para continuar...", "error")
         return redirect(url_for('usuario.login_administracion'))
+
+
 
 @bp.route("/register_usuario", methods=["GET", "POST"])
 def register_usuario():
@@ -60,7 +80,6 @@ def register_usuario():
                 identificacionUsuario=documento,
                 Facultad_idFacultad=facultad,
             )
-            
             try:
                 db.session.add(usuario)
                 db.session.commit()

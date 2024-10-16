@@ -9,6 +9,7 @@ from flask_login import (
     current_user,
 )
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy import or_
 from datetime import datetime
 from app.models import Equipo
 from app.models import Historial
@@ -36,7 +37,6 @@ def equipo():
 def start_server():
     try:
         server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         # Código de conexión y comunicación aquí
     except OSError as e:
         print(f"Error creando el socket: {e}")
@@ -110,6 +110,7 @@ def pedir_equipo():
             if otroSoftware is None:
                 registro = Historial(
                 Usuario_idUsuario=current_user.idUsuario,
+                horaInicio=datetime.now().strftime('%H:%M:%S'),
                 Equipo_idEquipo=pc,
                 nombreSala="D507",
                 software_idSoftware=software
@@ -117,6 +118,7 @@ def pedir_equipo():
             else :
                 registro = Historial(
                 Usuario_idUsuario=current_user.idUsuario,
+                horaInicio=datetime.now().strftime('%H:%M:%S'),
                 Equipo_idEquipo=pc,
                 nombreSala="D507",
                 software_idSoftware=software,
@@ -129,7 +131,6 @@ def pedir_equipo():
             equipo_ip = equipo.ipEquipo
             try:
                 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
                 # Código de conexión y comunicación aquí
             except OSError as e:
                 print(f"Error creando el socket: {e}")
@@ -159,10 +160,25 @@ def pedir_equipo():
 def estado_equipo():
     if current_user.is_authenticated:
         if request.method == "POST":
-            return "hola"
+            equipo_a_buscar = request.form.get('equipo')
+            buscar = (
+                db.session.query(Usuario.nombreUsuario, Usuario.identificacionUsuario, Equipo.idEquipo, Historial.horaInicio, Equipo.sala, Software.nombreSoftware, Historial.otroSoftware, Historial.Usuario_idUsuario, Historial.fecha)
+                .join(Historial, Historial.Usuario_idUsuario == Usuario.idUsuario)
+                .join(Equipo, Historial.Equipo_idEquipo == Equipo.idEquipo)
+                .join(Software, Historial.software_idSoftware == Software.idSoftware)
+                .filter(Historial.horaFin == None)
+                .filter(or_(
+                    Equipo.idEquipo==equipo_a_buscar,
+                    Usuario.nombreUsuario.ilike(f"%{equipo_a_buscar}%"),
+                    Usuario.identificacionUsuario==equipo_a_buscar
+                    )).all()
+            )
+            print("consulta para buscar",buscar)
+            cantidadEquipos = len(buscar)
+            return render_template("administracion/estadoEquipo/index.html", equipos_usados=buscar, cantidad_equipos=cantidadEquipos)
         else:
             equiposUsados = (
-                db.session.query(Usuario.nombreUsuario, Usuario.identificacionUsuario, Equipo.idEquipo, Historial.horaInicio, Historial.horaFin, Historial.nombreSala, Historial.Usuario_idUsuario, Software.nombreSoftware, Historial.otroSoftware)
+                db.session.query(Usuario.nombreUsuario, Usuario.identificacionUsuario, Equipo.idEquipo, Historial.horaInicio, Equipo.sala, Software.nombreSoftware, Historial.otroSoftware, Historial.Usuario_idUsuario, Historial.fecha)
                 .join(Historial, Historial.Usuario_idUsuario == Usuario.idUsuario)
                 .join(Equipo, Historial.Equipo_idEquipo == Equipo.idEquipo)
                 .join(Software, Historial.software_idSoftware == Software.idSoftware)
@@ -186,7 +202,7 @@ def liberar_equipo(idEquipo):
 
         # Actualizamos los campos
         equipo_a_editar.estadoEquipo = "libre"
-        editar_historial.horaFin = datetime.now().strftime('%H:%M') # Actualiza la hora
+        editar_historial.horaFin = datetime.now().strftime('%H:%M:%S') # Actualiza la hora
 
         try:
             db.session.commit()
@@ -209,7 +225,7 @@ def liberar_todo():
 
         # Actualizar los campos de cada equipo y registro del historial
         for historial in editar_historial_D507:
-            historial.horaFin = datetime.now().strftime('%H:%M')
+            historial.horaFin = datetime.now().strftime('%H:%M:%S')
 
         try:
             db.session.commit()  # Guardamos los cambios en la base de datos

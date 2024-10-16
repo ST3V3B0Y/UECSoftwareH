@@ -15,6 +15,7 @@ from app import create_app,db
 from app.models import Equipo
 from app.routes import equipo_routes
 from app.models import Usuario
+from app.models import Facultad
 from app.models import Software
 from app.config import SERVER_HOST, SERVER_PORT
 import os
@@ -39,7 +40,7 @@ def index():
             contraseña=contraseña,
             nombreUsuario="administrador",
             identificacionUsuario="1",
-            Facultad_idFacultad="Administracion"
+            Facultad_idFacultad=17
         )
         try:
             db.session.add(administrador)
@@ -47,7 +48,43 @@ def index():
         except IntegrityError as e:
             db.session.rollback()
             print("Error registrando administrador", e)
-    
+
+    facultades_list=["ADMINISTRACION DE EMPRESAS","ADMINISTRACION DE EMPRESAS HOTELERAS","COMUNICACION SOCIAL Y PERIODISMO","ECONOMIA","FILOSOFIA","GEOGRAFIA","GOBIERNO Y RELACIONES INTERNACIONALES","HISTORIA","PSICOLOGIA","SOCIOLOGIA","TRABAJO SOCIAL","ANTROPOLOGIA","ARQUEOLOGIA","CONTADURIA PUBLICA", "DERECHO","FIGRI","ADMINISTRATIVO"]
+    for facultad in facultades_list:
+        facultad_existente = Facultad.query.filter_by(nombreFacultad=facultad).first()
+        if not facultad_existente:
+            facultad = Facultad(
+                nombreFacultad=facultad
+                )
+            try:
+                db.session.add(facultad)
+                db.session.commit()
+            except IntegrityError as e:
+                db.session.rollback()
+                print(f"Error registrando el software {facultad}", e)
+
+    software_list = ["ADOBE CC", "SPSS", "ARCGIS", "RISK SIMULATOR", "STATA", "EVIEWS", "NVIVO"]
+
+    for nombre in software_list:
+        # Verifica si el software ya existe en la base de datos
+        software_existente = Software.query.filter_by(nombreSoftware=nombre).first()
+
+        if not software_existente:
+            # Si no existe, lo registramos
+            nuevo_software = Software(
+                nombreSoftware=nombre
+            )
+            try:
+                db.session.add(nuevo_software)
+                db.session.commit()
+            except IntegrityError as e:
+                db.session.rollback()
+                print(f"Error registrando el software {nombre}", e)
+    software=Software.query.filter_by(idSoftware=200).first()
+    if not software:
+        otroSoftware = db.session.execute(text('INSERT INTO Software (idSoftware, nombreSoftware) VALUES (200, :software)'),{'software': "OTRO"})
+        db.session.commit()
+
     #registrar equipos de las salas automaticamente
     for i in range(1, 69):
         # Verifica si el equipo ya existe en la base de datos
@@ -67,29 +104,6 @@ def index():
             except IntegrityError as e:
                 db.session.rollback()
                 print(f"Error registrando el equipo {i} en sala D507", e)
-
-    software_list = ["ADOBE CC", "SPSS", "ARCGIS", "RISK SIMULATOR", "STATA", "EVIEWS", "NVIVO"]
-    software=Software.query.filter_by(idSoftware=200).first()
-    if not software:
-        otroSoftware = db.session.execute(text('INSERT INTO Software (idSoftware, nombreSoftware) VALUES (200, :software)'),{'software': "OTRO"})
-        db.session.commit()
-
-
-    for nombre in software_list:
-        # Verifica si el software ya existe en la base de datos
-        software_existente = Software.query.filter_by(nombreSoftware=nombre).first()
-
-        if not software_existente:
-            # Si no existe, lo registramos
-            nuevo_software = Software(
-                nombreSoftware=nombre
-            )
-            try:
-                db.session.add(nuevo_software)
-                db.session.commit()
-            except IntegrityError as e:
-                db.session.rollback()
-                print(f"Error registrando el software {nombre}", e)
 
 
     for i in range(101,135):
@@ -111,7 +125,7 @@ def index():
                 db.session.rollback()
                 print(f"Error registrando el equipo {i} en sala H405")
 
-            
+
     for i in range(201,225):
         # Verifica si el equipo ya existe en la base de datos
         equipo_existente = Equipo.query.filter_by(idEquipo=i, sala="I408").first()
@@ -130,8 +144,6 @@ def index():
             except IntegrityError:
                 db.session.rollback()
                 print(f"Error registrando el equipo {i} en sala I408")
-
-    
 
     return render_template('index.html')
 

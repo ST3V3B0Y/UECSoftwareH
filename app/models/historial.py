@@ -6,7 +6,7 @@ class Historial(db.Model):
     idHistorial = db.Column(db.Integer, primary_key=True)
     Usuario_idUsuario = db.Column(db.Integer, db.ForeignKey('usuario.idUsuario'), nullable=False)
     fecha = db.Column(db.Date, default=datetime.now().date(), nullable=False)
-    horaInicio = db.Column(db.Time, default=datetime.now().time, nullable=False)
+    horaInicio = db.Column(db.Time, nullable=False)
     horaFin = db.Column(db.Time, nullable=True)
     Equipo_idEquipo = db.Column(db.Integer, db.ForeignKey('equipo.idEquipo'), nullable=False)
     nombreSala = db.Column(db.String(10), nullable=False)

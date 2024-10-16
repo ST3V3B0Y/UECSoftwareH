@@ -61,11 +61,12 @@
             </p>
         </div>
         <div class="bg-white shadow-md p-10 rounded-b-xl">
-            <div class="form__group my-5">
-                <input type="text" name="usuario" id="search-input" class="form__input" placeholder=" " required>
+            <form class="form__group my-5 flex flex-row" method="POST">
+                <input type="text" name="usuario" id="search-input" class="form__input" autofocus required>
                 <label style="font-size: 1.2rem;" for="search-input" class="form__label">Busqueda</label>
                 <span class="form__line"></span>
-            </div>
+                <button class="text-white rounded-lg text-center px-5 mx-5" style="background-color: rgba(0, 46, 25, .8);">Buscar</button>
+            </form>
             <!-- Tabla que se ajusta al contenido -->
             <div id="tabla">
                 <div class="not-prose relative rounded-xl bg-slate-100">
@@ -79,8 +80,9 @@
                                             <th class="border-b border-slate-300 p-4 pl-4 text-slate-500 text-left">Documento</th>
                                             <th class="border-b border-slate-300 p-4 pl-4 text-slate-500 text-left">Sala</th>
                                             <th class="border-b border-slate-300 p-4 pl-4 text-slate-500 text-left">Equipo</th>
-                                            <th class="border-b border-slate-300 p-4 pl-4 text-slate-500 text-left">Fecha Ingreso</th>
-                                            <th class="border-b border-slate-300 p-4 pl-4 text-slate-500 text-left">Fecha Salida</th>
+                                            <th class="border-b border-slate-300 p-4 pl-4 text-slate-500 text-left">Fecha</th>
+                                            <th class="border-b border-slate-300 p-4 pl-4 text-slate-500 text-left">Hora Ingreso</th>
+                                            <th class="border-b border-slate-300 p-4 pl-4 text-slate-500 text-left">Hora Salida</th>
                                             <th class="border-b border-slate-300 p-4 pl-4 text-slate-500 text-left">Software</th>
                                         </tr>
                                     </thead>
@@ -89,15 +91,16 @@
                                         <tr>
                                             <td class="border-b border-slate-300 p-4 pl-4 text-slate-500">{{ el_historial[0] }}</td> <!-- NombreUsuario -->
                                             <td class="documento border-b border-slate-300 p-4 pl-4 text-slate-500">{{ el_historial[1] }}</td> <!-- identificacionUsuario -->
-                                            <td class="border-b border-slate-300 p-4 text-slate-500">{{ el_historial[5] }}</td> <!-- Sala -->
+                                            <td class="border-b border-slate-300 p-4 text-slate-500">{{ el_historial[6] }}</td> <!-- Sala -->
                                             <td class="idEquipo border-b border-slate-300 p-4 pr-8 text-slate-500">{{ el_historial[2] }}</td> <!-- ID del Equipo -->
+                                            <td class="idEquipo border-b border-slate-300 p-4 pr-8 text-slate-500">{{ el_historial[5] }}</td> <!-- Fecha -->
                                             <td class="border-b border-slate-300 p-4 pr-8 text-slate-500">{{ el_historial[3] }}</td> <!-- Fecha de Ingreso -->
                                             <td class="border-b border-slate-300 p-4 pr-8 text-slate-500">{{ el_historial[4] }}</td> <!-- Fecha de Salida -->
-                                            <td class="contenido border-b border-slate-300 p-4 pr-8 text-slate-500">
-                                                {% if el_historial[7]=="OTRO" %}
-                                                    {{ el_historial[8] }}
+                                            <td class="contenido border-b border-slate-300 p-4 pr-8 {% if el_historial[8]=='OTRO' %} text-slate-800 font-bold {% else %} text-slate-500 {% endif %}">
+                                                {% if el_historial[8]=="OTRO" %}
+                                                    <b>{{ el_historial[9] }}</b>
                                                 {% else %}
-                                                    {{ el_historial[7] }}
+                                                    {{ el_historial[8] }}
                                                 {% endif %}
                                             </td> <!-- Software -->
                                         </tr>
