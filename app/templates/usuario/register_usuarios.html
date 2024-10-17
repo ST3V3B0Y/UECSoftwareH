@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <link rel="shortcut icon" href="{{ url_for('static', filename='../static/images/Logo-uexternado.png') }}">
@@ -33,53 +32,23 @@
         </div>
     </header>
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-    {% for category, message in messages %}
-    <div class="mt-10 mx-5
-                                {% if category == 'success' %}
-                                bg-green-100 border border-green-400 text-green-700
-                                {% elif category == 'error' %}
-                                bg-red-100 border border-red-400 text-red-700
-                                {% elif category == 'warning' %}
-                                bg-yellow-100 border border-yellow-400 text-yellow-700
-                                {% endif %}
-                                px-4 py-3 rounded relative" role="alert">
-        <strong class="font-bold">
-            {% if category == 'success' %}
-            Éxito:
-            {% elif category == 'error' %}
-            Error:
-            {% elif category == 'warning' %}
-            Advertencia:
-            {% endif %}
-        </strong>
-        <span class="block sm:inline">{{ message }}</span>
-    </div>
-    {% endfor %}
-    {% endif %}
-    {% endwith %}
-
-
     <div class="flex justify-center mt-20">
-        <form action="{{ url_for('usuario.register_usuario') }}" class="bg-white max-w-lg  p-10 rounded-3xl shadow-2xl"
-            method="post">
+        <form id="registerForm" class="bg-white max-w-lg p-10 rounded-3xl shadow-2xl" method="post">
             <h2 class="text-4xl mb-4 text-center">Registro de Usuarios sala D</h2>
             <p class="font-light text-lg text-center">Por favor registra los siguientes datos:</p>
 
             <div class="mt-8 grid gap-8">
                 <div class="form__group">
                     <input type="hidden" name="sala" value="">
-                    <input type="number" id="password" class="form__input" placeholder=" " name="documento" value="">
-                    <label style="font-size: 1.1rem;" for="password" class="form__label">Documento</label>
+                    <input type="number" id="documento" class="form__input" placeholder=" " name="documento" required>
+                    <label style="font-size: 1.1rem;" for="documento" class="form__label">Documento</label>
                     <span class="form__line"></span>
                 </div>
                 <div class="form__group">
-                    <input type="text" id="password" class="form__input" placeholder="Nombre Completo " name="nombre"
-                        required>
+                    <input type="text" id="nombre" class="form__input" placeholder="Nombre Completo " name="nombre" required>
                 </div>
                 <div class="select" required>
-                    <select name="facultad" class="format" required>
+                    <select name="facultad" class="format border-2 border-black" required>
                         <option selected disabled>Selecciona tu facultad</option>
                         {% for facultades in facultad %}
                         <option class="option" value="{{ facultades.idFacultad }}">
@@ -88,29 +57,56 @@
                         {% endfor %}
                     </select>
                 </div>
-                <!-- FIN FORMULARIO REGISTRO -->
-                <!-- ENLACES -->
                 <button type="submit" class="form__submit">Registrarme</button>
                 <a href="{{ url_for('usuario.login') }}" class="form__submit__return">Volver</a>
             </div>
         </form>
     </div>
+
     <script>
-        window.addEventListener("load", function () {
-            numpad.attach({
-                id: "password",
-                readonly: false
+        $(document).ready(function() {
+            $('#registerForm').on('submit', function(e) {
+                e.preventDefault(); // Evita el envío normal del formulario
+
+                $.ajax({
+                    type: "POST",
+                    url: "{{ url_for('usuario.register_usuario') }}",
+                    data: $(this).serialize(), // Serializa los datos del formulario
+                    success: function(response) {
+                        // Si el registro fue exitoso
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Éxito',
+                            text: response.message
+                        }).then(() => {
+                            window.location.href = "{{ url_for('equipo.equipo') }}"; // Redirige al usuario
+                        });
+                    },
+                    error: function(xhr) {
+                        const response = xhr.responseJSON; // Obtiene la respuesta JSON del error
+                        Swal.fire({
+                            icon: response.status === 'warning' ? 'warning' : 'error',
+                            title: response.status.charAt(0).toUpperCase() + response.status.slice(1),
+                            text: response.message
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script>
+            window.addEventListener("load", function () {
+                numpad.attach({
+                    id: "documento",
+                    readonly: false
+                })
             })
-        })
-    </script>
-    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-    <script>
-        $("body").on("contextmenu", function (e) {
-            return false;
-        })
-    </script>
-</body>
-
-
-
+        </script>
+        <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+        <script>
+            $("body").on("contextmenu", function (e) {
+                return false;
+            })
+        </script>
 </html>

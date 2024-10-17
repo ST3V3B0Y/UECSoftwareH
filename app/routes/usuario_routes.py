@@ -10,6 +10,7 @@ from flask_login import (
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import or_
 from werkzeug.security import check_password_hash, generate_password_hash
+from flask import jsonify
 from app import db, login_manager
 from app.models.facultad import Facultad
 from app.models.usuario import Usuario
@@ -55,23 +56,18 @@ def indexUsuario():
 def register_usuario():
     if request.method == "GET":
         facultad = Facultad.query.all()
-        return render_template(
-            "usuario/register_usuarios.html", facultad=facultad
-        )
+        return render_template("usuario/register_usuarios.html", facultad=facultad)
+    
     if request.method == "POST":
         documento = request.form["documento"]
         nombre = request.form["nombre"]
         facultad = request.form.get('facultad')
-        identificacionUsuario = Usuario.query.filter_by(
-            identificacionUsuario=documento
-        ).count()
+        identificacionUsuario = Usuario.query.filter_by(identificacionUsuario=documento).count()
 
         if not facultad or not nombre:
-            flash("Complete todos lo campos", "error")
-            return redirect(url_for("usuario.register_usuario"))
+            return {"status": "error", "message": "Complete todos los campos"}, 400
         elif identificacionUsuario > 0:
-            flash("identificacion ya registrada", "warning")
-            return redirect(url_for("usuario.register_usuario"))
+            return {"status": "warning", "message": "Identificación ya registrada"}, 400
         else:
             usuario = Usuario(
                 usuario=None,
@@ -83,28 +79,21 @@ def register_usuario():
             try:
                 db.session.add(usuario)
                 db.session.commit()
-                usuarioActual = Usuario.query.filter_by(
-                    identificacionUsuario=documento
-                ).first()
+                usuarioActual = Usuario.query.filter_by(identificacionUsuario=documento).first()
                 login_user(usuarioActual)
-                print("usuario actual ",current_user)
-                return redirect(
-                    url_for(
-                        "equipo.equipo",
-                    )
-                )
+                return {"status": "success", "message": "Registro exitoso"}, 200
             except IntegrityError as e:
                 db.session.rollback()
-                flash("error en registro", "error")
-                print("error en el registro", e)
-                return redirect(url_for("usuario.register_usuario"))
+                return {"status": "error", "message": "Error en el registro"}, 400
 
 
-@bp.route("/login_usuario", methods=["GET","POST"])
+
+
+@bp.route("/login_usuario", methods=["GET", "POST"])
 def login_usuario():
-    if request.method=="GET":
+    if request.method == "GET":
         return redirect(url_for('usuario.login'))
-    if request.method=="POST":
+    if request.method == "POST":
         identificacion = request.form.get("documento")
         if identificacion:
             usuarioActual = Usuario.query.filter_by(
@@ -112,12 +101,11 @@ def login_usuario():
             ).first()
             if usuarioActual:
                 login_user(usuarioActual)
-                print("usuario actual ",current_user)
-                return redirect(url_for("equipo.equipo"))
-            else :
-                flash("Usted no esta registrado en el sistema...", "error")
-                return redirect(url_for('usuario.login'))
-    return redirect(url_for("usuario.login"))
+                return jsonify({"success": True, "redirect": url_for("equipo.equipo")})
+            else:
+                return jsonify({"success": False, "message": "Usted no está registrado en el sistema..."})
+    return jsonify({"success": False, "message": "Error en la solicitud."})
+
     
 
 

@@ -77,14 +77,7 @@ def pedir_equipo():
             db.session.add(equipo)
             db.session.commit()
 
-            equipo_ip = equipo.ipEquipo
-            try:
-                server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                # Código de conexión y comunicación aquí
-            except OSError as e:
-                print(f"Error creando el socket: {e}")
-            finally:
-                server.close()
+        
 
             return jsonify({"status": "success", "message": f"Computador {pc} registrado y desbloqueado correctamente."})
         except IntegrityError as e:
@@ -108,7 +101,8 @@ def estado_equipo():
                     Equipo.idEquipo==equipo_a_buscar,
                     Usuario.nombreUsuario.ilike(f"%{equipo_a_buscar}%"),
                     Usuario.identificacionUsuario==equipo_a_buscar
-                    ))
+                    )
+                )
                 .order_by(Historial.fecha.desc(), Historial.horaInicio.desc())
                 .all()
             )
@@ -122,6 +116,7 @@ def estado_equipo():
                 .join(Equipo, Historial.Equipo_idEquipo == Equipo.idEquipo)
                 .join(Software, Historial.software_idSoftware == Software.idSoftware)
                 .filter(Historial.horaFin == None)
+                .order_by(Historial.fecha.desc(), Historial.horaInicio.desc())
                 .all()
             )
             print("informacion de la tabla",equiposUsados)

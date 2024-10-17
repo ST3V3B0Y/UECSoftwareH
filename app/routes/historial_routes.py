@@ -13,6 +13,7 @@ from app.models import Historial
 from app.models import Equipo
 from app.models import Usuario
 from app.models import Software
+from app.models import Facultad
 
 
 bp = Blueprint("historial", __name__)
@@ -52,3 +53,5 @@ def indexHistorial():
             return render_template('administracion/historial/index.html',historial=el_historial)
     else:
         return redirect(url_for('usuario.login_administracion'))
+    
+    

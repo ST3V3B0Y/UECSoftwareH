@@ -94,6 +94,42 @@
       return false;
     })
   </script>
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+  $(document).ready(function () {
+    $("form").on("submit", function (event) {
+      event.preventDefault(); // Evita el envío estándar del formulario
+
+      $.ajax({
+        type: "POST",
+        url: $(this).attr("action"),
+        data: $(this).serialize(),
+        success: function (response) {
+          if (response.success) {
+            window.location.href = response.redirect; // Redirigir si es exitoso
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: response.message,
+            }).then(() => {
+              window.location.href = "{{ url_for('usuario.register_usuario') }}"; // Redirige al usuario
+          });
+          }
+        },
+        error: function () {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Ocurrió un error en la solicitud.',
+          });
+        }
+      });
+    });
+  });
+</script>
 
 
 </body>
