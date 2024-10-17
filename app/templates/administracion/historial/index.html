@@ -66,6 +66,8 @@
                 <label style="font-size: 1.2rem;" for="search-input" class="form__label">Busqueda</label>
                 <span class="form__line"></span>
                 <button class="text-white rounded-lg text-center px-5 mx-5" style="background-color: rgba(0, 46, 25, .8);">Buscar</button>
+                <button id="generate-report-btn" class="text-white rounded-lg text-center px-5 mx-5" style="background-color: rgba(0, 46, 25, .8);">Generar Informe</button>
+
             </form>
             <!-- Tabla que se ajusta al contenido -->
             <div id="tabla">
@@ -160,7 +162,73 @@
 
         });
     </script>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        document.getElementById('generate-report-btn').addEventListener('click', function(event) {
+            event.preventDefault();
+        
+            const html = `
+                <div class="flex flex-col">
+                    <label for="fechaInicial" class="swal2-label">Fecha Inicial</label>
+                    <input type="date" id="fechaInicial" class="swal2-input" required>
+                    <label for="fechaFinal" class="swal2-label">Fecha Final</label>
+                    <input type="date" id="fechaFinal" class="swal2-input" required>
+                </div>
+            `;
+        
+            Swal.fire({
+                title: 'Generar Informe',
+                html: html,
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonText: 'Generar',
+                cancelButtonText: 'Cancelar',
+                preConfirm: () => {
+                    const fechaInicial = document.getElementById('fechaInicial').value;
+                    const fechaFinal = document.getElementById('fechaFinal').value;
+        
+                    if (!fechaInicial || !fechaFinal) {
+                        Swal.showValidationMessage('Por favor, ingrese ambas fechas.');
+                    }
+        
+                    return { fechaInicial, fechaFinal };
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const { fechaInicial, fechaFinal } = result.value;
+        
+                    // Realiza la solicitud AJAX para generar el informe
+                    $.ajax({
+                        url: "{{ url_for('historial.generar_informe') }}",
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({
+                            fechaInicio: fechaInicial,
+                            fechaFin: fechaFinal,
+                        }),
+                        success: function (response) {
+                            // Aquí, en vez de un mensaje de éxito, redirige a la descarga del archivo
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Exito!',
+                                text: response.message,
+                                confirmButtonColor: '#3085d6'
+                            }); // Asume que tu backend envía la URL del archivo
+                        },
+                        error: function (jqXHR) {
+                            console.error(jqXHR.responseText);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: response.message,
+                                confirmButtonColor: '#3085d6'
+                            });
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
