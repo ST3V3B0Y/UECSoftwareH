@@ -34,11 +34,11 @@ def index():
 
     if not administrador_existente:
         administrador = Usuario(
-            idUsuario=1,
+            idUsuario=2,
             usuario="administrador",
             contraseña=contraseña,
             nombreUsuario="administrador",
-            identificacionUsuario="1",
+            identificacionUsuario="2",
             Facultad_idFacultad=19
         )
         try:
@@ -62,7 +62,7 @@ def index():
                 db.session.rollback()
                 print(f"Error registrando el software {facultad}", e)
 
-    software_list = ["ADOBE CC", "SPSS", "ARCGIS", "RISK SIMULATOR", "STATA", "EVIEWS", "NVIVO"]
+    software_list = ["ADOBE CC", "SPSS", "ARCGIS", "RISK SIMULATOR", "STATA", "EVIEWS", "NVIVO", "REFINITIV", "QGIS"]
 
     for nombre in software_list:
         # Verifica si el software ya existe en la base de datos
