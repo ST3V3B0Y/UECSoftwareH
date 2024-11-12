@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="{{url_for('static', filename='../static/dist/js/numpad.js')}}"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
-    <title>Document</title>
+    <title>Salas de computo UEC</title>
 </head>
 
 <body class="fondo bg-cover bg-no-repeat">
@@ -152,18 +152,33 @@
 
     </div>
     <script>
+
         function confirmarPrestamo(equipoId) {
-            const softwares = {{ software | tojson }};
             
+            const softwares = {{ software | tojson }};
+            //let registroEncontrado = softwares.find(Software => software.idSoftware === 8);
+            //console.log(registroEncontrado);
+
             // Función para abrir el SweetAlert
             const openModal = (softwareId = '0', otroSoftwareNombre = '') => {
-                let selectHtml = '<select id="softwareSelect" name="software" class="swal2-select border-2 border-black rounded-lg" required><option value="0" selected disabled>Que Software usaras?</option>';
-                softwares.forEach(software => {
-                    selectHtml += `<option value="${software.idSoftware}" ${softwareId == software.idSoftware ? 'selected' : ''}>${software.nombreSoftware}</option>`;
-                });
+
+                // Preguntamos al usuario que Programa utilizará al seleccionar el ordenador
+                let selectHtml = '<select id="softwareSelect" name="software" class="swal2-select border-2 border-black rounded-lg" required><option value="0" selected disabled>Que Software usarás?</option>';
+                
+                // Si selecciona el ordenador 116 o 117 (Número real en sala 16 y 17), solo tendrá una opción dado a los equipos seleccionados
+                if (equipoId == 116 || equipoId == 117){
+
+                    softwares.filter(software => software.nombreSoftware === 'REFINITIV').forEach(software => {selectHtml += `<option value="${software.idSoftware}" ${softwareId == software.idSoftware ? 'selected' : ''}> ${software.nombreSoftware} </option>`})
+                
+                // Si seleccionó otro diferente a los anteriores entonces tendrá acceso a otros programas en la lista de opciones excepto un programa en particular
+                }else{
+                    
+                    softwares.filter(software => software.nombreSoftware !== 'REFINITIV').forEach(software => selectHtml += `<option value="${software.idSoftware}" ${softwareId == software.idSoftware ? 'selected' : ''}>${software.nombreSoftware}</option>`)
+
+                };
+
                 selectHtml += '</select>';
-                selectHtml += '<div id="otroSoftwareContainer" style="margin-top: 10px;"></div>';
-        
+                selectHtml += '<div id="otroSoftwareContainer" style="margin-top: 10px;"></div>'
                 // Añadir el campo 'otroSoftware' si es necesario
                 if (softwareId == '200') {
                     selectHtml += '<h2 class="swal2-title text-2xl">¿Cual? <br>(Orange, PowerBI, Internet, Office)</h2><input required="required" type="text" id="otroSoftware" class="swal2-input border-2 border-black" placeholder="Ingrese el nombre del software" value="' + otroSoftwareNombre + '">';
@@ -171,7 +186,7 @@
         
                 Swal.fire({
                     title: '¿Qué software usarás?',
-                    text: "¿Deseas pedir el equipo " + equipoId + "?",
+                    text: "¿Deseas pedir el equipo " + (equipoId - '100') + "?",
                     html: selectHtml,
                     icon: 'warning',
                     showCancelButton: true,
@@ -183,7 +198,7 @@
                     if (result.isConfirmed) {
                         const softwareId = document.getElementById('softwareSelect').value;
                         const otroSoftwareNombre = document.getElementById('otroSoftware') ? document.getElementById('otroSoftware').value : null;
-            
+                        
                         // Validar el campo adicional y la selección
                         if (softwareId === '0') {
                             Swal.fire({
@@ -196,7 +211,7 @@
                             });
                             return; // Detener la ejecución
                         }
-            
+                        
                         if (softwareId == '200' && (!otroSoftwareNombre || otroSoftwareNombre.trim() === '')) {
                             Swal.fire({
                                 icon: 'error',
@@ -208,7 +223,7 @@
                             });
                             return; // Detener la ejecución
                         }
-        
+                        
                         // Enviar la solicitud AJAX
                         $.ajax({
                             url: "{{ url_for('equipo.pedir_equipo') }}",
@@ -282,7 +297,7 @@
         function equipoUsado(equipoId){
             Swal.fire({
                 title: '¡Equipo en uso!',
-                text: "El equipo " + equipoId + " ya está en uso",
+                text: "El equipo " + (equipoId  - '100')+ " ya está en uso",
                 icon: 'warning',
                 showCancelButton: false,
                 confirmButtonColor: '#3085d6',

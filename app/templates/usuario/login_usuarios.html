@@ -9,7 +9,7 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="{{url_for('static', filename='../static/dist/js/numpad.js')}}"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Inicio de sesión</title>
 </head>
 
 <body class="fondo bg-cover bg-no-repeat">
@@ -63,7 +63,7 @@
   <div class="flex justify-center m-24">
     <form action="{{ url_for('usuario.login_usuario') }}" class="bg-white max-w-lg  p-10 rounded-3xl shadow-2xl"
       method="post">
-      <h2 class="text-4xl mb-4 text-center">Ingreso de usuarios sala H405</h2>
+      <h2 class="text-4xl mb-4 text-center">Inicio de sesión <br> Sala H405</h2>
       <p class="font-light text-lg text-center">Por favor ingresa los siguientes datos:</p>
       <div class="mt-8 grid gap-8">
         <div class="form__group">

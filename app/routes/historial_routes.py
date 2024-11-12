@@ -70,7 +70,7 @@ def generar_informe():
     fechaFinal = data.get('fechaFin')
 
     if not fechaInicio or not fechaFinal:
-        return jsonify({"status": "error", "message": "Las fechas no pueden ser vacías."}), 400
+        return jsonify({"status": "error", "message": "Las fechas no pueden estar vacías."}), 400
 
     fechaInicio = datetime.strptime(fechaInicio, '%Y-%m-%d')
     fechaFinal = datetime.strptime(fechaFinal, '%Y-%m-%d')

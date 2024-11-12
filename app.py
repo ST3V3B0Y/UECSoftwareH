@@ -30,16 +30,16 @@ app = create_app()
 def index():
     contraseña ="STU1e3c0"
     #registrar administrador
-    administrador_existente = Usuario.query.filter_by(idUsuario=2).first()
+    administrador_existente = Usuario.query.filter_by(idUsuario=1).first()
 
     if not administrador_existente:
         administrador = Usuario(
-            idUsuario=2,
+            idUsuario=1,
             usuario="administrador",
             contraseña=contraseña,
             nombreUsuario="administrador",
-            identificacionUsuario="2",
-            Facultad_idFacultad=19
+            identificacionUsuario="1",
+            Facultad_idFacultad=20
         )
         try:
             db.session.add(administrador)
@@ -62,12 +62,13 @@ def index():
                 db.session.rollback()
                 print(f"Error registrando el software {facultad}", e)
 
-    software_list = ["ADOBE CC", "SPSS", "ARCGIS", "RISK SIMULATOR", "STATA", "EVIEWS", "NVIVO", "REFINITIV", "QGIS"]
+    software_list = ["ADOBE CC", "SPSS", "ARCGIS", "RISK SIMULATOR", "STATA", "EVIEWS", "NVIVO", "QGIS", "REFINITIV"]
 
     for nombre in software_list:
+        
         # Verifica si el software ya existe en la base de datos
         software_existente = Software.query.filter_by(nombreSoftware=nombre).first()
-
+        
         if not software_existente:
             # Si no existe, lo registramos
             nuevo_software = Software(
