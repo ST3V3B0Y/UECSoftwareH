@@ -60,16 +60,16 @@ def pedir_equipo():
                     registro = Historial(
                     Usuario_idUsuario=current_user.idUsuario,
                     horaInicio=datetime.now().strftime('%H:%M:%S'),
-                    Equipo_idEquipo=pc,
-                    nombreSala="D507",
+                    Equipo_idEquipo=(pc),
+                    nombreSala="H405",
                     software_idSoftware=software
                 )
                 else :
                     registro = Historial(
                     Usuario_idUsuario=current_user.idUsuario,
                     horaInicio=datetime.now().strftime('%H:%M:%S'),
-                    Equipo_idEquipo=pc,
-                    nombreSala="D507",
+                    Equipo_idEquipo=(pc),
+                    nombreSala="H405",
                     software_idSoftware=software,
                     otroSoftware=otroSoftware
                     )
@@ -79,7 +79,7 @@ def pedir_equipo():
 
         
 
-            return jsonify({"status": "success", "message": f"Computador {pc} registrado y desbloqueado correctamente."})
+            return jsonify({"status": "success", "message": f"Computador {pc-100} registrado y desbloqueado correctamente."})
         except IntegrityError as e:
             print("error en registro pc: ", e)
             db.session.rollback()
@@ -151,14 +151,14 @@ def liberar_equipo(idEquipo):
 @bp.route("/equipo/liberar_todo/", methods=["POST"])
 def liberar_todo():
     if current_user.is_authenticated:
-        editar_historial_D507 = Historial.query.filter(Historial.horaFin==None, Equipo.sala=="D507").all()
-        editar_equipo_D507 = Equipo.query.filter(Equipo.estadoEquipo=="usado", Equipo.sala=="D507").all()
+        editar_historial_H405 = Historial.query.filter(Historial.horaFin==None, Equipo.sala=="H405").all()
+        editar_equipo_H405 = Equipo.query.filter(Equipo.estadoEquipo=="usado", Equipo.sala=="H405").all()
 
-        for equipo in editar_equipo_D507:
+        for equipo in editar_equipo_H405:
             equipo.estadoEquipo = "libre"
 
         # Actualizar los campos de cada equipo y registro del historial
-        for historial in editar_historial_D507:
+        for historial in editar_historial_H405:
             historial.horaFin = datetime.now().strftime('%H:%M:%S')
 
         try:

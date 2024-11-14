@@ -28,7 +28,7 @@ app = create_app()
 
 @app.route("/")
 def index():
-    contraseña ="scrypt:32768:8:1$FIYhHFrUEmO0kpti$7ec6e191d345f9d1e973e5b04fcfb4a06727a291421c96653d80b4398e5afe352cf597bc82504a8f8911843d6849a877bfdacf899bc3847f8d96d0a963db0b3e"
+    contraseña ="STU1e3c0"
     #registrar administrador
     administrador_existente = Usuario.query.filter_by(idUsuario=1).first()
 
@@ -39,7 +39,7 @@ def index():
             contraseña=contraseña,
             nombreUsuario="administrador",
             identificacionUsuario="1",
-            Facultad_idFacultad=17
+            Facultad_idFacultad=20
         )
         try:
             db.session.add(administrador)
@@ -48,7 +48,7 @@ def index():
             db.session.rollback()
             print("Error registrando administrador", e)
 
-    facultades_list=["ADMINISTRACION DE EMPRESAS","CIENCIA DE DATOS","MATEMATICAS","ADMINISTRACION DE EMPRESAS HOTELERAS","COMUNICACION SOCIAL Y PERIODISMO","ECONOMIA","FILOSOFIA","GEOGRAFIA","GOBIERNO Y RELACIONES INTERNACIONALES","HISTORIA","PSICOLOGIA","SOCIOLOGIA","TRABAJO SOCIAL","ANTROPOLOGIA","ARQUEOLOGIA","CONTADURIA PUBLICA", "DERECHO","FIGRI","ADMINISTRATIVO"]
+    facultades_list=["ADMINISTRACION DE EMPRESAS","CIENCIA DE DATOS","MATEMATICAS","ADMINISTRACION DE EMPRESAS HOTELERAS","COMUNICACION SOCIAL Y PERIODISMO","ECONOMIA","FILOSOFIA","GEOGRAFIA","GOBIERNO Y RELACIONES INTERNACIONALES","HISTORIA","PSICOLOGIA","SOCIOLOGIA","TRABAJO SOCIAL","ANTROPOLOGIA","ARQUEOLOGIA","CONTADURIA PUBLICA", "DERECHO","FIGRI", "DOCENTE","ADMINISTRATIVO"]
     for facultad in facultades_list:
         facultad_existente = Facultad.query.filter_by(nombreFacultad=facultad).first()
         if not facultad_existente:
@@ -62,12 +62,13 @@ def index():
                 db.session.rollback()
                 print(f"Error registrando el software {facultad}", e)
 
-    software_list = ["ADOBE CC", "SPSS", "ARCGIS", "RISK SIMULATOR", "STATA", "EVIEWS", "NVIVO"]
+    software_list = ["ADOBE CC", "SPSS", "ARCGIS", "RISK SIMULATOR", "STATA", "EVIEWS", "NVIVO", "QGIS", "REFINITIV"]
 
     for nombre in software_list:
+        
         # Verifica si el software ya existe en la base de datos
         software_existente = Software.query.filter_by(nombreSoftware=nombre).first()
-
+        
         if not software_existente:
             # Si no existe, lo registramos
             nuevo_software = Software(
@@ -87,7 +88,7 @@ def index():
     #registrar equipos de las salas automaticamente
     for i in range(1, 69):
         # Verifica si el equipo ya existe en la base de datos
-        equipo_existente = Equipo.query.filter_by(idEquipo=i, sala="D507").first()
+        equipo_existente = Equipo.query.filter_by(idEquipo=i, sala="D405").first()
 
         if not equipo_existente:
             # Si no existe, lo creamos
@@ -105,7 +106,7 @@ def index():
                 print(f"Error registrando el equipo {i} en sala D507", e)
 
 
-    for i in range(101,135):
+    for i in range(101,137):
         # Verifica si el equipo ya existe en la base de datos
         equipo_existente = Equipo.query.filter_by(idEquipo=i, sala="H405").first()
 

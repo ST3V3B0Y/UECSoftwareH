@@ -2329,8 +2329,10 @@ h5{
   border-radius: 5px;
   transition: all .4s ease;
   color: white;
-  font-weight: bold;
-  font-size: 15px;
+  font-weight:bolder;
+  font-size: 20px;
+  justify-content: center;
+  text-align: center;
 }
 
 .cta__right_usado{
@@ -2342,8 +2344,11 @@ h5{
   border-radius: 5px;
   transition: all .4s ease;
   color: white;
-  font-weight: bold;
-  font-size: 15px;
+  font-weight:bolder;
+  font-size: 20px;
+  justify-content: center;
+  text-align: center;
+
 }
 
 .cta__right_dañado{
@@ -2357,6 +2362,9 @@ h5{
   color: white;
   font-weight: bold;
   font-size: 15px;
+  justify-content: center;
+  text-align: center;
+
 }
 
 .cta__right:hover{
@@ -2371,15 +2379,68 @@ h5{
   cursor: pointer;
 }
 
+.box-image{
+  display: flex;
+  width: 100%;
+  margin-top: 2rem;
+  justify-content: space-between;
+  box-shadow: 0 -4px 0 rgb(237, 235, 209);
+  /* background-image: linear-gradient(to left, color1, color2); */
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.712), rgba(255, 255, 255, 0));
+}
+
+.box-recepcion{
+  width: 100%;
+  margin: auto;
+  display: block;;
+  flex-direction: row;
+}
+
 .info_recep{
+  text-align: center;
+  justify-content: center;
+  margin: auto;
   color: #fff;
-  font-size: 1.2rem;
+  font-size: 1.4rem;
+}
+
+.info_recep2{
+  width: 60px;
+  margin: auto;
+  padding: auto;
 }
 
 .recepcion{
-  background-color: gray;
-  width: 100%;
+  width: 100px;
+  height: 100px;
+  margin: auto;
+  border-radius: 10px;
+  /* background-color: rgb(255, 255, 255); */
   background-size: cover;
+}
+
+.box-exit{
+  width: auto;
+  margin: auto;
+}
+
+.exit{
+  width: 100px;
+  border-radius: 5px;
+  /* padding: 10px; */
+  margin-left: 0;
+  margin-right: 10rem;
+}
+
+.box-flecha{
+  width: auto;
+  margin: auto;
+}
+
+.flecha{
+  width: 150px;
+  margin: auto;
+  padding: auto;
 }
 
 .line-3{
@@ -2658,77 +2719,92 @@ h5{
 
 /* ------------------------------------------------ Equipos-------------------------------------- */
 
- .equipos{
-  display: flex;
+.box-sala{
+  grid-template-columns: repeat(2, 0.5fr);
+}
+
+.fondo-sala{
+  margin: 1rem 0 1rem 24rem; 
+  font-size: 32px;
+  text-decoration: underline rgb(50, 148, 50);
+}
+
+
+.equipos{
+  display: grid;
+  grid-template-columns: repeat(2, 0.5fr);  
+  gap: 0.2rem 0.3rem;  
   flex-direction:row;
   justify-content: space-between;
+  margin-bottom: 1.5rem;
 }
 
 .izquierda{
-  display: grid;
+  display: block;
   grid-template-columns: repeat(2, 0.5fr);
   justify-content: center;
+}
 
+.box-izquierda{
+  width: auto;
+  display: grid;                
+  grid-template-columns: repeat(2, 0.5fr);  
+  gap: 0.2rem 0;  
+  justify-content: center;
 }
 
 .derecha{
-  padding: 0;
-  padding-bottom: 5rem;
-  display: grid;
-  grid-template-columns: repeat(2, 0.5fr); 
-  padding: 0;
+  display: grid;                
+  grid-template-columns: repeat(2, 0.5fr);  
+  gap: 0.2rem 0;  
   justify-content: center;
 } 
  
 .box-left {
   width: auto;
-  margin: 1rem 10rem 1rem 1rem;
-  display: grid; 
+  margin: 1rem 15rem 1rem 1rem;
+  display: grid;                
   grid-template-columns: repeat(1, 0.5fr);  
-  gap: 0.25rem 0;              
+  gap: 0.2rem 0;              
   justify-content: center;
-
 }
 
 .box-right{
   width: auto;
-  margin: 1rem 1rem 5rem 1rem;
-  margin-right: 5px;
-  padding-bottom: 1rem;
-  display: grid;
+  margin: 1rem 0 0 1rem;
+  display: grid;                
   grid-template-columns: repeat(1, 0.5fr);  
-  gap: 0.25rem 0;  
+  gap: 0.2rem 0;
   justify-content: center;
-
+  box-sizing: border-box;
 } 
 
  .box-mid-left{
+  /* background-color: blue; */
   width: auto;
-  margin: 1rem 1px 8rem 1rem;
-  margin-top: 1rem;
-  margin-right: 5px;
-  padding-bottom: 10rem;
+  margin: 1rem 0 6rem 1rem;
+  padding-bottom: 4rem;
+  display: grid;                
+  grid-template-columns: repeat(1, 0.5fr);  
+  gap: 0.2rem;  
   justify-content: center;
-
-
 }  
 
 .box-mid-right{
+  /* background-color: red; */
   width: auto;
-  margin: 1rem 15rem 8.2rem 1px;
-  padding-bottom: 10rem;
+  height: 68.5%;
+  margin: 1rem 15rem 8rem 0;
+  padding-bottom: 4rem;
   display: grid;                
   grid-template-columns: repeat(1, 0.5fr);  
-  gap: 0.2rem 0;  
+  gap: 0.2rem;  
   justify-content: center;
-
 } 
 
-.box-image{
-  width: 100%;
-  justify-items: end;
-  margin-left: 20rem;
-  margin-bottom: 5rem;
-  justify-content: center;
+.tittle-sala{
+  text-align: center;
+  text-shadow: 1px 1px 4px black;
 }
+
 

@@ -8,7 +8,7 @@
     <script src="https://kit.fontawesome.com/175f4319ea.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Estado de equipos</title>
 </head>
 
 <body>
@@ -57,16 +57,16 @@
     <div id="contenedor" class="bg-slate-100 rounded-2xl max-w-7xl flex flex-col m-auto my-10">
         <div class="bg-green-600 opacity-95 rounded-xl flex flex-row shadow-lg justify-evenly items-center py-4">
             <p class="text-slate-100 text-3xl font-normal font-sans">
-                Equipos en Uso {{ cantidad_equipos }}.
+                <b> Equipos en uso: </b> {{ cantidad_equipos }} 
             </p>
         </div>
         <div class="bg-white shadow-md p-10 rounded-b-xl">
             <p class="text-black ">
-                Busqueda de registros por equipo o cedula
+                Búsqueda de registros por equipo o cédula
             </p>
             <form class="form__group my-5 flex flex-row" method="POST">
                 <input type="text" name="equipo" id="search-input" class="form__input" autofocus required>
-                <label style="font-size: 1.2rem;" for="search-input" class="form__label">Busqueda</label>
+                <label style="font-size: 1.2rem;" for="search-input" class="form__label">Búsqueda</label>
                 <span class="form__line"></span>
                 <button class="text-white rounded-lg text-center px-5 mx-5" style="background-color: rgba(0, 46, 25, .8);">Buscar</button>
                 <button class="text-white rounded-lg text-center px-5 mx-5" style="background-color: rgba(0, 46, 25, .8);" id="liberar_todos">Liberar todos</button>
