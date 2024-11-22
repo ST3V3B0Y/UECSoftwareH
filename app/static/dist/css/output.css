@@ -9,7 +9,7 @@
 
 *,
 ::before,
-::after {
+::after { 
   box-sizing: border-box;
   /* 1 */
   border-width: 0;
@@ -2379,20 +2379,20 @@ h5{
   cursor: pointer;
 }
 
-.box-image{
+.box-recepcion{
   display: flex;
   width: 100%;
   margin-top: 2rem;
   justify-content: space-between;
   box-shadow: 0 -4px 0 rgb(237, 235, 209);
-  /* background-image: linear-gradient(to left, color1, color2); */
-  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.712), rgba(255, 255, 255, 0));
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
 }
 
-.box-recepcion{
+.recepcion{
   width: 100%;
   margin: auto;
-  display: block;;
+  display: block;
+  justify-content: space-between;
   flex-direction: row;
 }
 
@@ -2401,7 +2401,7 @@ h5{
   justify-content: center;
   margin: auto;
   color: #fff;
-  font-size: 1.4rem;
+  font-size: 2rem;
 }
 
 .info_recep2{
@@ -2410,7 +2410,7 @@ h5{
   padding: auto;
 }
 
-.recepcion{
+.image-recepcion{
   width: 100px;
   height: 100px;
   margin: auto;
@@ -2425,10 +2425,9 @@ h5{
 }
 
 .exit{
-  width: 100px;
+  width: 80px;
   border-radius: 5px;
-  /* padding: 10px; */
-  margin-left: 0;
+  margin-left: 1px;
   margin-right: 10rem;
 }
 
@@ -2724,9 +2723,8 @@ h5{
 }
 
 .fondo-sala{
-  margin: 1rem 0 1rem 24rem; 
-  font-size: 32px;
-  text-decoration: underline rgb(50, 148, 50);
+  margin: 1rem 0 1rem 20rem; 
+  font-size: 30px;
 }
 
 
@@ -2793,7 +2791,7 @@ h5{
 .box-mid-right{
   /* background-color: red; */
   width: auto;
-  height: 68.5%;
+  height: 67.5%;
   margin: 1rem 15rem 8rem 0;
   padding-bottom: 4rem;
   display: grid;                
@@ -2802,9 +2800,9 @@ h5{
   justify-content: center;
 } 
 
-.tittle-sala{
+.titulo-sala{
   text-align: center;
-  text-shadow: 1px 1px 4px black;
+  text-shadow: 0px 0px 10px black;
 }
 
 

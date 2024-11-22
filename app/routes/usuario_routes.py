@@ -122,8 +122,6 @@ def login_administracion():
         usuario = request.form.get("usuario")
         contraseña = request.form.get("contraseña")
         user = Usuario.query.filter_by(usuario=usuario).first()
-        # contraseña_hash = generate_password_hash(contraseña)
-        # print(contraseña_hash)
         if user:
             
             if user.contraseña == contraseña:

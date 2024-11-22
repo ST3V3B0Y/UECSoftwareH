@@ -5,7 +5,7 @@ import ctypes
 
 #SERVER_HOST = '10.100.103.142'  # Dirección IP del servidor
 SERVER_HOST = '10.33.0.93'
-SERVER_PORT = 5040
+SERVER_PORT = 5001
 #SERVER_PORT = 5040
 
 import tkinter as tk
