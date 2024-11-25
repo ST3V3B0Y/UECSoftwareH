@@ -16,6 +16,10 @@
     <header class="flex row bg-white max-h-32 justify-between items-center">
         <img src="{{url_for('static',filename='../static/images/logo-uec.png')}}" alt=""
             class="object-contain w-1/6 aspect-3/2 mx-4" />
+        <button onclick="reload()" class="reload text-green-900 m-16 text-2xl font-semibold p-4 rounded-xl hover:text-green-800 hover:shadow-2xl">
+            <i class="fa-solid fa-rotate-right mx-4" style="color: #14532d;"></i>Recargar Página
+        </button>
+        <div>
             <ul class="navlist">
                 <li>
                     <a href="{{ url_for('usuario.administracion') }}"
@@ -23,6 +27,7 @@
                             class="fa-solid fa-hand-point-left"></i> Volver</a>
                 </li>
             </ul>
+        </div>
     </header>
     <!--fin nav-->
 
@@ -61,8 +66,8 @@
             </p>
         </div>
         <div class="bg-white shadow-md p-10 rounded-b-xl">
-            <p class="text-black ">
-                Búsqueda de registros por equipo o cédula
+            <p class="text-black" style="font-size: 20px;">
+                Búsqueda de registros por <span style="text-decoration: underline; font-weight: bold;">DOCUMENTO</span> o <span style="text-decoration: underline; font-weight: bold;">EQUIPO</span>
             </p>
             <form class="form__group my-5 flex flex-row" method="POST">
                 <input type="text" name="equipo" id="search-input" class="form__input" autofocus required>

@@ -16,6 +16,10 @@
     <header class="flex row bg-white max-h-32 justify-between items-center">
         <img src="{{url_for('static',filename='../static/images/logo-uec.png')}}" alt=""
             class="object-contain w-1/6 aspect-3/2 mx-4" />
+        <button onclick="reload()" class="reload text-green-900 m-16 text-2xl font-semibold p-4 rounded-xl hover:text-green-800 hover:shadow-2xl">
+            <i class="fa-solid fa-rotate-right mx-4" style="color: #14532d;"></i>Recargar Página
+        </button>
+        <div>
             <ul class="navlist">
                 <li>
                     <a href="{{ url_for('usuario.administracion') }}"
@@ -23,6 +27,7 @@
                             class="fa-solid fa-hand-point-left"></i> Volver</a>
                 </li>
             </ul>
+        </div>
     </header>
     <!--fin nav-->
 
@@ -121,48 +126,109 @@
                 </div>
             </div>
             <!-- Controles de paginación en su propia fila -->
-            <div id="pagination-controls" class="flex justify-center my-4"></div>
+
+            <div class="pagination">
+                <button class="arrow"  id="prev">&#8592;</button> <!-- Flecha izquierda -->
+                <div id="pagination-controls" class="flex justify-center my-4"></div>
+                <button class="arrow" id="next">&#8594;</button> <!-- Flecha derecha -->
+            </div>
+            <!-- Fin Controles de paginación -->
         </div>
     </div>
 
     <!-- Script de Paginación -->
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            const rowsPerPage = 10;
+            let showPage = 10;
+            let currentPage = 1;
+            let startPage = 1;  
             const table = document.getElementById('usuarios-tbody');
             const rows = table.getElementsByTagName('tr');
-            const totalPages = Math.ceil(rows.length / rowsPerPage);
+            const totalPages = Math.ceil(rows.length / showPage);
+
 
             function displayPage(page) {
-                const start = (page - 1) * rowsPerPage;
-                const end = start + rowsPerPage;
-
+                const start = (page - 1) * showPage;
+                const end = start + showPage;
+                console.log(rows.length)
                 for (let i = 0; i < rows.length; i++) {
                     rows[i].style.display = i >= start && i < end ? '' : 'none';
                 }
             }
+            
+            const paginationControls = document.getElementById('pagination-controls');
+            const prevButton = document.getElementById('prev');
+            const nextButton = document.getElementById('next');
+
 
             function createPaginationControls() {
-                const paginationControls = document.getElementById('pagination-controls');
                 paginationControls.innerHTML = '';
+                const endPage = Math.min(startPage + showPage - 1, totalPages);
 
-                for (let i = 1; i <= totalPages; i++) {
+                // Crear los botones de página
+                for (let i = startPage; i <= endPage; i++) {
                     const btn = document.createElement('button');
                     btn.textContent = i;
                     btn.classList.add('px-3', 'py-1', 'mx-1', 'bg-gray-200', 'hover:bg-gray-300', 'rounded');
+                    
+                    // Activar la clase 'active' si la página es la actual
+                    if (i === currentPage) {
+                        btn.classList.add('active');
+                        btn.style.backgroundColor = 'gray'
+                    }
+
+                    // Si es una página deshabilitada, añadir la clase 'disabled'
+                    if (i > totalPages) {
+                        btn.classList.add('disabled');
+                        btn.disabled = true;
+                    }
+                    
                     btn.addEventListener('click', function() {
+                        currentPage = i;
                         displayPage(i);
+                        createPaginationControls();
                     });
+
                     paginationControls.appendChild(btn);
                 }
+
+                // Deshabilitar las flechas si estamos en los extremos
+                prevButton.disabled = startPage === 1;
+                nextButton.disabled = startPage + showPage - 1 >= totalPages;
+
+                // Deshabilitar la flecha anterior si estamos en el primer conjunto de páginas
+                prevButton.disabled = startPage === 1;
+                
+                // Habilitar/deshabilitar la flecha siguiente dependiendo del conjunto de páginas
+                nextButton.disabled = startPage + showPage - 1 >= totalPages;
             }
 
-            displayPage(1);
-            createPaginationControls();
+            // Manejo de las flechas de navegación
+            prevButton.addEventListener('click', () => {
+                if (startPage > 1) {
+                    startPage -= showPage;
+                    currentPage = startPage;
+                    displayPage(currentPage);
+                    createPaginationControls();
+                }
+            });
 
+            nextButton.addEventListener('click', () => {
+                if (startPage + showPage <= totalPages) {
+                    startPage += showPage;
+                    currentPage = startPage;
+                    displayPage(currentPage);
+                    createPaginationControls();
+                }
+            });
+
+            createPaginationControls();
+            displayPage(currentPage);
         });
     </script>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
     <script>
         document.getElementById('generate-report-btn').addEventListener('click', function(event) {
             event.preventDefault();
@@ -228,6 +294,12 @@
                 }
             });
         });
+    </script>
+
+    <script>
+        function reload(){
+            window.location.reload();
+        }
     </script>
 </body>
 

@@ -1903,6 +1903,11 @@ body{
   transition: all .55s ease;
 }
 
+.reload{
+  border-bottom: 2px solid transparent;
+  transition: all .55s ease;
+}
+
 .hero{
   height: 100%;
   width: 100%;
@@ -2147,7 +2152,7 @@ h5{
 .form__submit_register{
   margin-top: -15px;
   text-decoration: none;
-  background-color: rgba(0,46,25,.8);
+  background-color: rgba(0, 116, 64, 0.8);
   color: #fff;
   font-family: 'Roboto', sans-serif;
   font-weight: 300;
@@ -2519,7 +2524,194 @@ h5{
   border-color: #a3e635;
 }
 
+.box-sala{
+  grid-template-columns: repeat(2, 0.5fr);
+}
+
+.fondo-sala{
+  margin: 1rem 0 1rem 20rem; 
+  font-size: 30px;
+}
+
+
+.equipos{
+  display: grid;
+  grid-template-columns: repeat(2, 0.5fr);  
+  gap: 0.2rem 0.3rem;  
+  flex-direction:row;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.izquierda{
+  display: block;
+  grid-template-columns: repeat(2, 0.5fr);
+  justify-content: center;
+}
+
+.box-izquierda{
+  width: auto;
+  display: grid;                
+  grid-template-columns: repeat(2, 0.5fr);  
+  gap: 0.2rem 0;  
+  justify-content: center;
+}
+
+.derecha{
+  display: grid;                
+  grid-template-columns: repeat(2, 0.5fr);  
+  gap: 0.2rem 0;  
+  justify-content: center;
+} 
+ 
+.box-left {
+  width: auto;
+  margin: 1rem 15rem 1rem 1rem;
+  display: grid;                
+  grid-template-columns: repeat(1, 0.5fr);  
+  gap: 0.2rem 0;              
+  justify-content: center;
+}
+
+.box-right{
+  width: auto;
+  margin: 1rem 0 0 1rem;
+  display: grid;                
+  grid-template-columns: repeat(1, 0.5fr);  
+  gap: 0.2rem 0;
+  justify-content: center;
+  box-sizing: border-box;
+} 
+
+ .box-mid-left{
+  /* background-color: blue; */
+  width: auto;
+  margin: 1rem 0 6rem 1rem;
+  padding-bottom: 4rem;
+  display: grid;                
+  grid-template-columns: repeat(1, 0.5fr);  
+  gap: 0.2rem;  
+  justify-content: center;
+}  
+
+.box-mid-right{
+  /* background-color: red; */
+  width: auto;
+  height: 67.5%;
+  margin: 1rem 15rem 8rem 0;
+  padding-bottom: 4rem;
+  display: grid;                
+  grid-template-columns: repeat(1, 0.5fr);  
+  gap: 0.2rem;  
+  justify-content: center;
+} 
+
+.titulo-sala{
+  text-align: center;
+  text-shadow: 0px 0px 2rem black;
+}
+
+.box-confirm{
+  display: none;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  z-index: 1;
+  background-color: #00000080;
+  animation: 1s;
+}
+
+.confirm-message{
+  display:block;
+  background-color: white;
+  justify-content: center;
+  text-align: center;
+  margin: auto;
+  margin-top: 10rem;
+  padding: 1rem;
+  border-radius: 10px;
+  width: 32rem;
+  height: 22rem;
+  animation: confirm-message 0.3s;
+
+}
+
+.img-alert{
+  box-sizing: border-box;
+  margin: auto;
+  margin-bottom: 2rem;
+  width: 130px;
+  height: 130px;
+  animation: img-alert 1s;
+}
+
+.confirm-h1{
+  color: rgb(85, 85, 85);
+  font-weight: 600;
+  font-size: 30px;
+  font-family:'Roboto', sans-serif;
+  margin: 1rem;
+}
+
+.cancelar_confirm{
+  background-color: rgb(209, 0, 0);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  margin-left: 8rem;
+  width: 5rem;
+  height: 3rem;
+}
+
+.cancelar_confirm:hover{
+  background-color: rgb(160, 0, 0);
+}
+
+.aceptar_confirm{
+  background-color: rgb(1, 151, 1); 
+  color: white;
+  border: none;
+  border-radius: 5px;
+  margin-right: 8rem;
+  width: 5rem;
+  height: 3rem;
+}
+
+.aceptar_confirm:hover{
+  background-color: rgba(0,46,25,.8);
+}
+
+.btn-confirm{ 
+  display: flex;
+  justify-content: space-between;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.arrow {
+  font-size: 20px;
+  padding: 5px 10px;
+  cursor: pointer;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+}
+
 /*FIN DE ESTILOS DE PAGINAICON*/
+
+.arrow:hover{
+  transition: all 0.5s ease;
+  background-color: rgb(209, 209, 209);
+}
+
+.arrow:not(:hover){
+  transition: all 0.5s ease;
+}
 
 .hover\:bg-gray-300:hover {
   --tw-bg-opacity: 1;
@@ -2716,93 +2908,56 @@ h5{
   }
 }
 
-/* ------------------------------------------------ Equipos-------------------------------------- */
+@keyframes confirm-message{
+  0%{
+    transform: scale(0.7);
+  }
 
-.box-sala{
-  grid-template-columns: repeat(2, 0.5fr);
+  45%{
+    transform: scale(1.05);
+  }
+
+  80%{
+    transform: scale(0.95);
+  }
+
+  100%{
+    transform: scale(1);
+  }
 }
 
-.fondo-sala{
-  margin: 1rem 0 1rem 20rem; 
-  font-size: 30px;
+@keyframes img-alert{
+  0%{
+    transform: scale(0);
+  }
+
+  100%{
+    transform: scale(1);
+  }
 }
 
-
-.equipos{
-  display: grid;
-  grid-template-columns: repeat(2, 0.5fr);  
-  gap: 0.2rem 0.3rem;  
-  flex-direction:row;
-  justify-content: space-between;
-  margin-bottom: 1.5rem;
+@media (max-width: 860px){ 
+  .confirm-message{
+    width: 22rem;
+    height: 32rem;
+  }
+  .btn-confirm{
+    all: unset;
+    display: grid;
+    margin: auto;
+    justify-content: center;
+    margin: 10px;
+  }
+  .cancelar_confirm{
+    margin: 10px;
+  }
+  .aceptar_confirm{
+    margin: 10px;
+  }
 }
 
-.izquierda{
-  display: block;
-  grid-template-columns: repeat(2, 0.5fr);
-  justify-content: center;
+@media (max-width: 920px){
+  .hero{
+    display: block;
+  }
 }
-
-.box-izquierda{
-  width: auto;
-  display: grid;                
-  grid-template-columns: repeat(2, 0.5fr);  
-  gap: 0.2rem 0;  
-  justify-content: center;
-}
-
-.derecha{
-  display: grid;                
-  grid-template-columns: repeat(2, 0.5fr);  
-  gap: 0.2rem 0;  
-  justify-content: center;
-} 
- 
-.box-left {
-  width: auto;
-  margin: 1rem 15rem 1rem 1rem;
-  display: grid;                
-  grid-template-columns: repeat(1, 0.5fr);  
-  gap: 0.2rem 0;              
-  justify-content: center;
-}
-
-.box-right{
-  width: auto;
-  margin: 1rem 0 0 1rem;
-  display: grid;                
-  grid-template-columns: repeat(1, 0.5fr);  
-  gap: 0.2rem 0;
-  justify-content: center;
-  box-sizing: border-box;
-} 
-
- .box-mid-left{
-  /* background-color: blue; */
-  width: auto;
-  margin: 1rem 0 6rem 1rem;
-  padding-bottom: 4rem;
-  display: grid;                
-  grid-template-columns: repeat(1, 0.5fr);  
-  gap: 0.2rem;  
-  justify-content: center;
-}  
-
-.box-mid-right{
-  /* background-color: red; */
-  width: auto;
-  height: 67.5%;
-  margin: 1rem 15rem 8rem 0;
-  padding-bottom: 4rem;
-  display: grid;                
-  grid-template-columns: repeat(1, 0.5fr);  
-  gap: 0.2rem;  
-  justify-content: center;
-} 
-
-.titulo-sala{
-  text-align: center;
-  text-shadow: 0px 0px 10px black;
-}
-
-
