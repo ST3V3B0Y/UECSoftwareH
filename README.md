@@ -1,4 +1,4 @@
-# Sistema de Control de Equipos de Préstamo
+# Sistema de Control de Equipos de Préstamo del Bloque H
 
 ¡Hola! Bienvenido a mi proyecto de programación en Python, que utiliza Flask y SQLAlchemy. Este sistema ha sido desarrollado como parte de mi entrega a la Universidad Externado de Colombia y ya se encuentra en producción.
 
