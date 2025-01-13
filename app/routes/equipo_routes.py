@@ -79,7 +79,7 @@ def pedir_equipo():
 
         
 
-            return jsonify({"status": "success", "message": f"Computador {pc-100} registrado y desbloqueado correctamente."})
+            return jsonify({"status": "success", "message": f"Computador {pc} registrado y desbloqueado correctamente."})
         except IntegrityError as e:
             print("error en registro pc: ", e)
             db.session.rollback()

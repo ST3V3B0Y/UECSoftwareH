@@ -50,7 +50,7 @@
                 <div class="select" required>
                     <select name="facultad" class="format border-2 border-black" required>
                         <option selected disabled>Selecciona tu facultad</option>
-                        {% for facultades in facultad %}
+                            {% for facultades in facultad %}
                         <option class="option" value="{{ facultades.idFacultad }}">
                             {{ facultades.nombreFacultad }}
                         </option>

@@ -85,28 +85,7 @@ def index():
         otroSoftware = db.session.execute(text('INSERT INTO Software (idSoftware, nombreSoftware) VALUES (200, :software)'),{'software': "OTRO"})
         db.session.commit()
 
-    #registrar equipos de las salas automaticamente
-    for i in range(1, 69):
-        # Verifica si el equipo ya existe en la base de datos
-        equipo_existente = Equipo.query.filter_by(idEquipo=i, sala="D405").first()
-
-        if not equipo_existente:
-            # Si no existe, lo creamos
-            nuevo_equipo = Equipo(
-                idEquipo=i,
-                estadoEquipo="libre",
-                sala="D507",
-                ipEquipo=0
-            )
-            try:
-                db.session.add(nuevo_equipo)
-                db.session.commit()
-            except IntegrityError as e:
-                db.session.rollback()
-                print(f"Error registrando el equipo {i} en sala D507", e)
-
-
-    for i in range(101,137):
+    for i in range(1, 37):
         # Verifica si el equipo ya existe en la base de datos
         equipo_existente = Equipo.query.filter_by(idEquipo=i, sala="H405").first()
 
@@ -124,6 +103,27 @@ def index():
             except IntegrityError:
                 db.session.rollback()
                 print(f"Error registrando el equipo {i} en sala H405")
+
+
+    #registrar equipos de las salas automaticamente
+    for i in range(101,169):
+        # Verifica si el equipo ya existe en la base de datos
+        equipo_existente = Equipo.query.filter_by(idEquipo=i, sala="D507").first()
+
+        if not equipo_existente:
+            # Si no existe, lo creamos
+            nuevo_equipo = Equipo(
+                idEquipo=i,
+                estadoEquipo="libre",
+                sala="D507",
+                ipEquipo=0
+            )
+            try:
+                db.session.add(nuevo_equipo)
+                db.session.commit()
+            except IntegrityError as e:
+                db.session.rollback()
+                print(f"Error registrando el equipo {i} en sala D507", e)
 
 
     for i in range(201,225):
