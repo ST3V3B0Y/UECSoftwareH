@@ -114,7 +114,7 @@
                             {% for equipo in equipos %}
                             {% if equipo.idEquipo==i %}
                             {% if equipo.estadoEquipo == "usado" %}
-                            <a style="padding: 25px; padding-bottom: 15px; padding-top: 15px" class="cta__right_usado" value="{{ i - 100 }}" name="action" onclick="equipoUsado( {{ i }} )">
+                            <a style="padding: 25px; padding-bottom: 15px; padding-top: 15px" class="cta__right_usado" value="{{ i }}" name="action" onclick="equipoUsado( {{ i }} )">
                                 {{ i }}
                             </a>
                             {% else %}
@@ -133,7 +133,7 @@
                             {% for equipo in equipos %}
                             {% if equipo.idEquipo==i %}
                             {% if equipo.estadoEquipo == "usado" %}
-                            <a style="padding: 25px; padding-bottom: 15px; padding-top: 15px" class="cta__right_usado" value="{{ i - 100 }}" name="action" onclick="equipoUsado( {{ i }} )">
+                            <a style="padding: 25px; padding-bottom: 15px; padding-top: 15px" class="cta__right_usado" value="{{ i }}" name="action" onclick="equipoUsado( {{ i }} )">
                                 {{ i }}
                             </a>
                             {% else %}
@@ -170,7 +170,7 @@
                 let selectHtml = '<select id="softwareSelect" name="software" class="swal2-select border-2 border-black rounded-lg" required><option value="0" selected disabled>Que Software usarás?</option>';
                 
                 // Si selecciona el ordenador 116 o 117 (Número real en sala 16 y 17), solo tendrá una opción dado a los equipos seleccionados
-                if (equipoId == 116 || equipoId == 117){
+                if (equipoId == 16 || equipoId == 17){
 
                     softwares.filter(software => software.nombreSoftware === 'REFINITIV').forEach(software => {selectHtml += `<option value="${software.idSoftware}" ${softwareId == software.idSoftware ? 'selected' : ''}> ${software.nombreSoftware} </option>`})
                 
@@ -190,7 +190,7 @@
         
                 Swal.fire({
                     title: '¿Qué software usarás?',
-                    text: "¿Deseas pedir el equipo " + (equipoId - '100') + "?",
+                    text: "¿Deseas pedir el equipo " + (equipoId) + "?",
                     html: selectHtml,
                     icon: 'warning',
                     showCancelButton: true,
