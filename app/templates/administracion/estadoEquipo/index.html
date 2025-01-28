@@ -31,6 +31,23 @@
     </header>
     <!--fin nav-->
 
+    
+    <!-- Alerta de confirmación al liberar todos los equipos -->
+    
+    <div id="confirm_alert" class="box-confirm">
+        <div class="confirm-message">
+            <img class="img-alert" src="../../../static/images/advertencia.png" alt="">
+            <h1 class="confirm-h1">¿Estás seguro que deseas liberar todos los equipos?</h1>
+            <div class="btn-confirm">
+                <button id="cancelar" class="cancelar_confirm">Cancelar</button>
+                <button id="aceptar" class="aceptar_confirm">confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fin Alerta de confirmación al liberar todos los equipos -->
+
+
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             {% for category, message in messages %}
@@ -183,6 +200,7 @@
 
         });
     </script>
+
     <!-- Script de SweetAlert2 y liberacion de equipos -->
     <script>
         document.querySelectorAll('.liberar-btn').forEach(button => {
@@ -195,12 +213,43 @@
             });
         });
 
+        const confirm_alert = document.getElementById('confirm_alert')
+        const cerrar = document.getElementById('cancelar')
+        const confirmar = document.getElementById('aceptar')
+
+
         liberar_todos = document.getElementById('liberar_todos')
         liberar_todos.addEventListener('click', function(event){
             event.preventDefault()
-            liberarTodos()
+            abrirLiberar()
 
         })
+
+        
+        function abrirLiberar(){
+            confirm_alert.style.display = 'block'
+            console.log('Modulo de confirmación abierto!')
+        }
+        
+        function cancelarConfirm(){
+            confirm_alert.style.display = 'none'
+            console.log('Modulo de confirmación cerrado!')
+        }
+
+        function aceptarConfirm(){
+            confirm_alert.style.display = 'none'
+            console.log('Modulo de confirmación aceptado!')
+            liberarTodos()
+        }
+
+        cerrar.onclick = function(){ 
+            cancelarConfirm()
+        }
+
+        confirmar.onclick = function(){
+            aceptarConfirm()
+        }
+        
 
         function liberarTodos(){
             fetch('/equipo/liberar_todo/',{
