@@ -76,10 +76,10 @@
             // Muestra el overlay_encuesta
             document.getElementById('overlay_encuesta').style.display = 'flex';
             
-            // Redirige a otra página después de un retraso (por ejemplo, 2 segundos)
+            // Redirige al QR después de un retraso (por ejemplo, 30 segundos)
             setTimeout(function() {
-              window.location.href = "{{url_for('usuario.login')}}"; // Cambia esta URL por la que desees
-            }, 25000); // Cambia el tiempo de retraso si lo deseas
+              window.location.href = "{{url_for('usuario.login')}}"; 
+            }, 30000); 
             }
         );
       </script>
