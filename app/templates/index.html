@@ -59,8 +59,30 @@
     <div class="hero-text">
       <h4>BIENVENIDOS A LA </h4>
       <h1>SALA DE SOFTWARE ESPECIALIZADA</h1>
-      <a href="{{url_for('usuario.login')}}" style="text-decoration: none;"><i class="fa-solid fa-person-running"></i>
+
+      <a href="javascript:void(0);" style="text-decoration: none;" id="link_encuesta" class="link_encuesta"><i class="fa-solid fa-person-running"></i>
         INGRESAR</a>
+        
+          <!-- El cuadro que se superpone -->
+      <div id="overlay_encuesta" class="overlay_encuesta">
+      <div class="ventana_qr">
+          <img src="\static\images\encuesta.jpeg" alt="QR Encuesta Satisfación" class="img-qr">
+          <h2 class="texto-qr">Te agradecemos realizar la encuesta para continuar</h2>
+      </div>
+      </div>
+
+      <script>
+        document.getElementById('link_encuesta').addEventListener('click', function() {
+            // Muestra el overlay_encuesta
+            document.getElementById('overlay_encuesta').style.display = 'flex';
+            
+            // Redirige a otra página después de un retraso (por ejemplo, 2 segundos)
+            setTimeout(function() {
+              window.location.href = "{{url_for('usuario.login')}}"; // Cambia esta URL por la que desees
+            }, 25000); // Cambia el tiempo de retraso si lo deseas
+            }
+        );
+      </script>
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     </div>
 
@@ -79,6 +101,5 @@
         </div>
       </div>
     </div>
-
 
 </html>
