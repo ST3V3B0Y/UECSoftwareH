@@ -62,7 +62,7 @@ def index():
                 db.session.rollback()
                 print(f"Error registrando el software {facultad}", e)
 
-    software_list = ["ADOBE CC", "SPSS", "ARCGIS", "RISK SIMULATOR", "STATA", "EVIEWS", "NVIVO", "QGIS", "REFINITIV"]
+    software_list = ["ADOBE CC", "ARCGIS", "RISK SIMULATOR", "STATA", "EVIEWS", "QGIS", "REFINITIV"]
 
     for nombre in software_list:
         

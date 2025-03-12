@@ -64,10 +64,15 @@ def register_usuario():
         facultad = request.form.get('facultad')
         identificacionUsuario = Usuario.query.filter_by(identificacionUsuario=documento).count()
 
+                # Validaciones de los datos ingresados
         if not facultad or not nombre:
             return {"status": "error", "message": "Complete todos los campos"}, 400
+        elif len(documento) < 6 or len(documento) > 12:
+            return {"status": "error", "message": "Identificación inválida"}, 400
         elif identificacionUsuario > 0:
             return {"status": "warning", "message": "Identificación ya registrada"}, 400
+        elif len(nombre) < 7 or len(nombre) == " ":
+            return {"status": "error", "message": "Escriba su nombre completo"}, 400
         else:
             usuario = Usuario(
                 usuario=None,
