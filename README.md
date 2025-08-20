@@ -38,11 +38,16 @@ HTML/CSS/JavaScript: Para el diseño de la interfaz de usuario.
 Si deseas contribuir a este proyecto, ¡serás bienvenido! Siéntete libre de hacer un fork del repositorio y enviar un pull request con tus mejoras o correcciones.
 
 **Contacto**
-Si tienes preguntas o comentarios sobre el proyecto, no dudes en contactarme:
+Si tienes preguntas o comentarios sobre el proyecto, no dudes en contactarnos:
 
 Nombre: Jorge Ivan Molano Nieto
 Universidad Externado de Colombia
 Correo electrónico: [jorgito475@gmail.com]
+
+Nombre: Stevens J. Niño Jaramillo
+Universidad Externado de Colombia
+Correo electrónico: [st3v3njaramillo@gmail.com]
+
 
 ¡Gracias por tu interés en mi proyecto! Espero que encuentres útil esta herramienta para la gestión de equipos de préstamo.
 
